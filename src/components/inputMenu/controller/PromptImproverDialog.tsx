@@ -22,7 +22,7 @@ import { useSettings } from "@/hooks/useSettings"
 import { useAiModel } from "@/hooks/useAiModel"
 import { analyticsService, ANALYTICS_EVENTS } from "@/services/analytics"
 import { ImprovePromptData } from "@/types/prompt"
-import { PromptImprover } from "@/services/genai/PromptImprover"
+import { ImproverService } from "@/services/promptImprover/improverService"
 import { stopPropagation } from "@/utils/dom"
 import { mergeVariableConfigs } from "@/utils/variables/variableParser"
 import { improvePromptSettingsStorage } from "@/services/storage/definitions"
@@ -42,7 +42,7 @@ interface PromptImproveDialogProps {
 /**
  * Prompt save/edit dialog component
  */
-export const PromptImproveDialog: React.FC<PromptImproveDialogProps> = ({
+export const PromptImproverDialog: React.FC<PromptImproveDialogProps> = ({
   open,
   onOpenChange,
   initialData,
@@ -66,7 +66,7 @@ export const PromptImproveDialog: React.FC<PromptImproveDialogProps> = ({
   const [improvedContent, setImprovedContent] = useState("")
   const [isImproving, setIsImproving] = useState(false)
   const [improvementError, setImprovementError] = useState<string | null>(null)
-  const promptImproverRef = useRef<PromptImprover | null>(null)
+  const promptImproverRef = useRef<ImproverService | null>(null)
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false)
   const [modelSettingsDialogOpen, setModelSettingsDialogOpen] = useState(false)
 
@@ -83,7 +83,7 @@ export const PromptImproveDialog: React.FC<PromptImproveDialogProps> = ({
   // Initialize PromptImprover
   useEffect(() => {
     if (!promptImproverRef.current) {
-      promptImproverRef.current = new PromptImprover()
+      promptImproverRef.current = new ImproverService()
       promptImproverRef.current.loadSettings()
 
       // Watch for settings changes

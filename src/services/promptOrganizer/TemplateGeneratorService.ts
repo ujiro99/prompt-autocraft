@@ -16,7 +16,7 @@ import type {
 } from "@/types/promptOrganizer"
 import type { VariablePreset } from "@/types/prompt"
 import { schema } from "./outputSchema"
-import { SYSTEM_ORGANIZATION_INSTRUCTION } from "@/services/genai/defaultPrompts"
+import { SYSTEM_ORGANIZATION_INSTRUCTION } from "@/services/promptOrganizer/defaultPrompts"
 import { i18n } from "#imports"
 
 /**

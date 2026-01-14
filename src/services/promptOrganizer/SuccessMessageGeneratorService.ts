@@ -5,7 +5,7 @@
 
 import { GeminiClient } from "@/services/genai/GeminiClient"
 import type { GeneratedTemplate } from "@/types/promptOrganizer"
-import { ORGANIZATION_SUMMARY_PROMPT } from "@/services/genai/defaultPrompts"
+import { ORGANIZATION_SUMMARY_PROMPT } from "@/services/promptOrganizer/defaultPrompts"
 import { categoryService } from "./CategoryService"
 
 const MSG_SCHEMA = {

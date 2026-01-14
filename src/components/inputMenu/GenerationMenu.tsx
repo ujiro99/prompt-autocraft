@@ -10,7 +10,7 @@ import { useCaretNode } from "@/hooks/useCaretNode"
 import { useContainer } from "@/hooks/useContainer"
 import { usePromptExecution } from "@/hooks/usePromptExecution"
 import { usePromptOrganizer } from "@/hooks/usePromptOrganizer"
-import { PromptImproveDialog } from "@/components/inputMenu/controller/PromptImproveDialog"
+import { PromptImproverDialog } from "@/components/inputMenu/controller/PromptImproverDialog"
 import { OrganizerExecuteDialog } from "@/components/promptOrganizer/OrganizerExecuteDialog"
 import { OrganizerResultDialog } from "@/components/promptOrganizer/OrganizerResultDialog"
 import { OrganizerPreviewDialog } from "@/components/promptOrganizer/OrganizerPreviewDialog"
@@ -175,7 +175,7 @@ export function GenerationMenu({
 
       {/* Prompt Improve Dialog */}
       {improvePromptData && (
-        <PromptImproveDialog
+        <PromptImproverDialog
           open={improvePromptData !== null}
           onOpenChange={() => setImprovePromptData(null)}
           initialData={improvePromptData}

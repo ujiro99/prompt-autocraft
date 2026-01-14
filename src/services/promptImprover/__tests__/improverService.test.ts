@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from "vitest"
-import { PromptImprover } from "../PromptImprover"
+import { ImproverService } from "../improverService"
 
 // Create mocks for GeminiClient
 const mockInitialize = vi.fn()
@@ -22,12 +22,12 @@ vi.mock("../GeminiClient", () => ({
 }))
 
 describe("PromptImprover", () => {
-  let improver: PromptImprover
+  let improver: ImproverService
 
   beforeEach(() => {
     vi.clearAllMocks()
     mockIsInitialized.mockReturnValue(true)
-    improver = new PromptImprover()
+    improver = new ImproverService()
   })
 
   describe("improvePrompt", () => {

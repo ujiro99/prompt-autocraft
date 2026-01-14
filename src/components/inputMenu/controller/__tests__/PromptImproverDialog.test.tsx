@@ -47,7 +47,7 @@ vi.mock("@/services/genai/PromptImprover", () => ({
 
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { PromptImproveDialog } from "../PromptImproveDialog"
+import { PromptImproverDialog } from "../PromptImproverDialog"
 
 describe("PromptImproveDialog", () => {
   const mockOnInput = vi.fn()
@@ -69,21 +69,21 @@ describe("PromptImproveDialog", () => {
 
   describe("rendering", () => {
     it("should render dialog when open", () => {
-      render(<PromptImproveDialog {...defaultProps} />)
+      render(<PromptImproverDialog {...defaultProps} />)
       expect(
         screen.getByText("dialogs.promptImprove.title"),
       ).toBeInTheDocument()
     })
 
     it("should render improve button", () => {
-      render(<PromptImproveDialog {...defaultProps} />)
+      render(<PromptImproverDialog {...defaultProps} />)
       expect(
         screen.getByText("dialogs.promptImprove.improveButton"),
       ).toBeInTheDocument()
     })
 
     it("should render textarea with initial content", () => {
-      render(<PromptImproveDialog {...defaultProps} />)
+      render(<PromptImproverDialog {...defaultProps} />)
       const textarea = screen.getByPlaceholderText(
         "placeholders.enterPromptContent",
       )
@@ -92,7 +92,7 @@ describe("PromptImproveDialog", () => {
 
     it("should disable improve button when content is empty", () => {
       render(
-        <PromptImproveDialog
+        <PromptImproverDialog
           {...defaultProps}
           initialData={{ content: "", variables: [] }}
         />,
@@ -107,7 +107,7 @@ describe("PromptImproveDialog", () => {
   describe("improve functionality", () => {
     it("should show loading state when improving", async () => {
       const user = userEvent.setup()
-      render(<PromptImproveDialog {...defaultProps} />)
+      render(<PromptImproverDialog {...defaultProps} />)
 
       const improveButton = screen.getByText(
         "dialogs.promptImprove.improveButton",
@@ -123,7 +123,7 @@ describe("PromptImproveDialog", () => {
 
     it("should show preview area when improvement starts", async () => {
       const user = userEvent.setup()
-      render(<PromptImproveDialog {...defaultProps} />)
+      render(<PromptImproverDialog {...defaultProps} />)
 
       const improveButton = screen.getByText(
         "dialogs.promptImprove.improveButton",
@@ -139,7 +139,7 @@ describe("PromptImproveDialog", () => {
 
     it("should disable textarea during improvement", async () => {
       const user = userEvent.setup()
-      render(<PromptImproveDialog {...defaultProps} />)
+      render(<PromptImproverDialog {...defaultProps} />)
 
       const textarea = screen.getByPlaceholderText(
         "placeholders.enterPromptContent",
@@ -158,7 +158,7 @@ describe("PromptImproveDialog", () => {
   describe("preview area", () => {
     it("should show preview textarea", async () => {
       const user = userEvent.setup()
-      render(<PromptImproveDialog {...defaultProps} />)
+      render(<PromptImproverDialog {...defaultProps} />)
 
       const improveButton = screen.getByText(
         "dialogs.promptImprove.improveButton",
@@ -173,7 +173,7 @@ describe("PromptImproveDialog", () => {
 
     it("should show cancel button in preview", async () => {
       const user = userEvent.setup()
-      render(<PromptImproveDialog {...defaultProps} />)
+      render(<PromptImproverDialog {...defaultProps} />)
 
       const improveButton = screen.getByText(
         "dialogs.promptImprove.improveButton",
@@ -190,7 +190,7 @@ describe("PromptImproveDialog", () => {
   describe("input with improved prompt", () => {
     it("should use improved content when input button is clicked", async () => {
       const user = userEvent.setup()
-      render(<PromptImproveDialog {...defaultProps} />)
+      render(<PromptImproverDialog {...defaultProps} />)
 
       // Start improvement
       const improveButton = screen.getByText(
@@ -211,7 +211,7 @@ describe("PromptImproveDialog", () => {
 
     it("should keep preview visible until dialog is closed", async () => {
       const user = userEvent.setup()
-      render(<PromptImproveDialog {...defaultProps} />)
+      render(<PromptImproverDialog {...defaultProps} />)
 
       const improveButton = screen.getByText(
         "dialogs.promptImprove.improveButton",
@@ -231,7 +231,7 @@ describe("PromptImproveDialog", () => {
   describe("cancel improvement", () => {
     it("should hide preview when cancel is clicked", async () => {
       const user = userEvent.setup()
-      render(<PromptImproveDialog {...defaultProps} />)
+      render(<PromptImproverDialog {...defaultProps} />)
 
       const improveButton = screen.getByText(
         "dialogs.promptImprove.improveButton",
@@ -259,7 +259,7 @@ describe("PromptImproveDialog", () => {
 
   describe("dialog close", () => {
     it("should reset state when dialog is closed", async () => {
-      const { rerender } = render(<PromptImproveDialog {...defaultProps} />)
+      const { rerender } = render(<PromptImproverDialog {...defaultProps} />)
 
       // Start improvement
       const user = userEvent.setup()
@@ -269,10 +269,10 @@ describe("PromptImproveDialog", () => {
       await user.click(improveButton)
 
       // Close dialog
-      rerender(<PromptImproveDialog {...defaultProps} open={false} />)
+      rerender(<PromptImproverDialog {...defaultProps} open={false} />)
 
       // Reopen dialog
-      rerender(<PromptImproveDialog {...defaultProps} open={true} />)
+      rerender(<PromptImproverDialog {...defaultProps} open={true} />)
 
       // Improve button should be visible again.
       await waitFor(() => {
@@ -286,7 +286,7 @@ describe("PromptImproveDialog", () => {
   describe("input functionality", () => {
     it("should call onInput when input button is clicked", async () => {
       const user = userEvent.setup()
-      render(<PromptImproveDialog {...defaultProps} />)
+      render(<PromptImproverDialog {...defaultProps} />)
 
       const inputButton = screen.getByText("common.input")
       await user.click(inputButton)
@@ -301,7 +301,7 @@ describe("PromptImproveDialog", () => {
 
     it("should disable input button when content is empty", () => {
       render(
-        <PromptImproveDialog
+        <PromptImproverDialog
           {...defaultProps}
           initialData={{ content: "", variables: [] }}
         />,
@@ -315,7 +315,7 @@ describe("PromptImproveDialog", () => {
   describe("keyboard shortcuts", () => {
     it("should submit on Ctrl+Enter", async () => {
       const user = userEvent.setup()
-      render(<PromptImproveDialog {...defaultProps} />)
+      render(<PromptImproverDialog {...defaultProps} />)
 
       const textarea = screen.getByPlaceholderText(
         "placeholders.enterPromptContent",
@@ -330,7 +330,7 @@ describe("PromptImproveDialog", () => {
 
     it("should submit on Meta+Enter", async () => {
       const user = userEvent.setup()
-      render(<PromptImproveDialog {...defaultProps} />)
+      render(<PromptImproverDialog {...defaultProps} />)
 
       const textarea = screen.getByPlaceholderText(
         "placeholders.enterPromptContent",

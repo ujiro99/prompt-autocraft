@@ -3,9 +3,9 @@
  * Business logic for improving prompts using Gemini AI
  */
 
-import { GeminiClient } from "./GeminiClient"
-import type { ImproveOptions } from "./types"
-import { GeminiError, GeminiErrorType } from "./types"
+import { GeminiClient } from "../genai/GeminiClient"
+import type { ImproveOptions } from "../genai/types"
+import { GeminiError, GeminiErrorType } from "../genai/types"
 import { improvePromptCacheService } from "../storage/improvePromptCache"
 import { improvePromptSettingsStorage } from "../storage/definitions"
 import {
@@ -19,9 +19,9 @@ import {
 const DEFAULT_TIMEOUT = 30000
 
 /**
- * Prompt Improver Service
+ * Prompt Improve Service
  */
-export class PromptImprover {
+export class ImproverService {
   private client: GeminiClient
   private abortController: AbortController | null = null
   private timeoutId: ReturnType<typeof setTimeout> | null = null

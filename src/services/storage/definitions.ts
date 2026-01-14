@@ -15,7 +15,7 @@ import type {
 } from "@/types/promptOrganizer"
 import type { AiConfigCacheData } from "./aiConfigCache"
 import type { ImprovePromptCacheData } from "./improvePromptCache"
-import { DEFAULT_ORGANIZATION_PROMPT } from "../genai/defaultPrompts"
+import { DEFAULT_ORGANIZATION_PROMPT } from "../promptOrganizer/defaultPrompts"
 
 /**
  * Default settings values
