@@ -18,7 +18,11 @@
         "[data-testid='prompt-textarea']",
         "#main form textarea"
       ],
-      "sendButton": ["form button.composer-submit-button-color"]
+      "sendButton": [
+        "form button.composer-submit-button-color",
+        "button[data-testid='composer-speech-button']",
+        "button#composer-submit-button"
+      ]
     },
     "popupPlacement": {
       "alignOffset": -20,
