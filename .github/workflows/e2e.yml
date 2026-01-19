@@ -7,6 +7,8 @@ on:
       - "**.md"
   pull_request:
     branches: [main]
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at 00:00 UTC
 
 jobs:
   e2e:

@@ -3,7 +3,7 @@ import { Page } from "@playwright/test"
 import { WaitHelpers } from "../utils/wait-helpers"
 
 export class StableDiffusionPage extends BasePage {
-  static readonly url = "https://stablediffusionweb.com/ja/auth/login"
+  static readonly url = "https://stablediffusionweb.com/auth/login"
 
   constructor(page: Page) {
     super(page, "Stable Diffusion")
@@ -42,13 +42,19 @@ export class StableDiffusionPage extends BasePage {
     }, 5000)
     await signInButton.click()
 
+    // Navigate to Text to Image page.
+    const textToImageLink = this.page.locator(
+      'aside a[href="/app/image-generator"]',
+    )
+    await textToImageLink.click()
+
     // Wait until input field is displayed
     await this.page.waitForSelector(this.selectors.textInput[1], {
       timeout: 5000,
     })
 
     // Wait until shadow host exists
-    await this.page.waitForSelector("prompt-history-ui", {
+    await this.page.waitForSelector("prompt-autocraft-ui", {
       timeout: 5000,
       state: "attached",
     })
