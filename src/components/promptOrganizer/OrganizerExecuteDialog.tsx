@@ -218,7 +218,9 @@ export const OrganizerExecuteDialog: React.FC<Props> = ({
           <div className="space-y-6">
             {/* API Key Warning */}
             {apiKeyMissing && (
-              <ApiKeyWarningBanner onOpenSettings={handleOpenSettings} />
+              <ApiKeyWarningBanner
+                onOpenSettings={() => setModelSettingsDialogOpen(true)}
+              />
             )}
 
             {/* Pending Templates Warning */}
