@@ -18,6 +18,18 @@ import {
  */
 const DEFAULT_TIMEOUT = 30000
 
+interface ImproveLog {
+  start_line: number
+  end_line: number
+  description: string
+  benefit: string
+}
+
+interface ImproveResponse {
+  improvedPrompt: string
+  changeLog: ImproveLog[]
+}
+
 /**
  * Prompt Improve Service
  */
@@ -87,8 +99,6 @@ export class ImproverService {
       onError?.(error)
     }, DEFAULT_TIMEOUT)
 
-    let improvedPrompt = ""
-
     try {
       // Combine improvement prompt with user prompt
       const userContent = `${this.improvementPrompt}
@@ -97,27 +107,63 @@ export class ImproverService {
 ${prompt}
 </user_prompt>`
 
-      const stream = this.client.generateContentStream(userContent, {
-        systemInstruction: this.systemInstruction, // Fixed role definition
-        generateContentConfig: {
-          abortSignal: this.abortController.signal,
+      const schema = {
+        type: "object",
+        properties: {
+          improvedPrompt: {
+            type: "string",
+            description: "The improved version of the user's prompt.",
+          },
+          changeLog: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                start_line: {
+                  type: "integer",
+                },
+                end_line: {
+                  type: "integer",
+                },
+                description: {
+                  type: "string",
+                },
+                benefit: {
+                  type: "string",
+                },
+              },
+              required: ["start_line", "end_line", "description", "benefit"],
+            },
+          },
         },
+      }
+
+      const config = {
+        systemInstruction: this.systemInstruction,
+      }
+
+      const response =
+        await this.client.generateStructuredContentStream<ImproveResponse>(
+          userContent,
+          schema,
+          config,
+          {
+            signal: this.abortController.signal,
+            onProgress: (chunkText) => {
+              onStream?.(chunkText || "")
+            },
+          },
+        )
+
+      // debug logs
+      console.log("prompt:", response.improvedPrompt)
+      response.changeLog.forEach((log, index) => {
+        console.log(
+          `- [${index + 1}] ${log.description}:\n  Lines ${log.start_line}-${log.end_line}\n  Benefit: ${log.benefit}\n\n`,
+        )
       })
 
-      for await (const chunk of stream) {
-        // Check if cancelled
-        if (this.abortController?.signal.aborted) {
-          const error = new GeminiError(
-            "Request was cancelled",
-            GeminiErrorType.CANCELLED,
-          )
-          onError?.(error)
-          return
-        }
-
-        improvedPrompt += chunk.text
-        onStream?.(chunk.text)
-      }
+      const improvedPrompt = response.improvedPrompt
 
       // Clear timeout on successful completion
       this.clearTimeout()
