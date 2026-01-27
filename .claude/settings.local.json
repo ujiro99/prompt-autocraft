@@ -35,7 +35,8 @@
       "Bash(git mv:*)",
       "mcp__serena__replace_symbol_body",
       "WebFetch(domain:wxt.dev)",
-      "WebFetch(domain:vitest.dev)"
+      "WebFetch(domain:vitest.dev)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []
