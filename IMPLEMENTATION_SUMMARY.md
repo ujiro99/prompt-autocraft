@@ -211,7 +211,7 @@ The implementation maintains full backward compatibility:
 - Existing usages of `CategorySelector` without the `editable` prop continue to work as before
 - The CategoryService API remains unchanged
 - No breaking changes to existing category functionality
-- Default categories (externCommunication, development, etc.) remain read-only and localized
+- Default categories (externalCommunication, development, etc.) remain read-only and localized
 
 ## Accessibility
 

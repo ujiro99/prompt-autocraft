@@ -227,6 +227,7 @@ export const CategoryEditor = ({
                         variant="ghost"
                         className="h-6 w-6 p-0"
                         onClick={() => handleRenameCategory(category.id)}
+                        aria-label={i18n.t("common.save")}
                       >
                         <Check className="h-3 w-3" />
                       </Button>
@@ -235,6 +236,7 @@ export const CategoryEditor = ({
                         variant="ghost"
                         className="h-6 w-6 p-0"
                         onClick={handleCancelRename}
+                        aria-label={i18n.t("common.cancel")}
                       >
                         <X className="h-3 w-3" />
                       </Button>
@@ -259,6 +261,7 @@ export const CategoryEditor = ({
                               e.preventDefault()
                               e.stopPropagation()
                             }}
+                            aria-label={i18n.t("common.edit")}
                           >
                             <MoreVertical className="h-3 w-3" />
                           </Button>
@@ -321,6 +324,7 @@ export const CategoryEditor = ({
                 variant="ghost"
                 className="h-6 w-6 p-0"
                 onClick={handleAddCategory}
+                aria-label={i18n.t("common.save")}
               >
                 <Check className="h-3 w-3" />
               </Button>
@@ -332,6 +336,7 @@ export const CategoryEditor = ({
                   setIsAddingCategory(false)
                   setNewCategoryName("")
                 }}
+                aria-label={i18n.t("common.cancel")}
               >
                 <X className="h-3 w-3" />
               </Button>
