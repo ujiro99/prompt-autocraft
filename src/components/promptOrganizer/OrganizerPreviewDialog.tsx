@@ -312,26 +312,6 @@ export const OrganizerPreviewDialog: React.FC<OrganizerPreviewDialogProps> = ({
                       />
                     </div>
 
-                    {/* Use Case Input */}
-                    <div className="space-y-1">
-                      <div className="text-xs font-semibold">
-                        {i18n.t("promptOrganizer.preview.useCase")}
-                      </div>
-                      <Textarea
-                        value={selectedTemplate.useCase}
-                        onChange={(e) =>
-                          updateTemplate({ useCase: e.target.value })
-                        }
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" && !e.shiftKey) {
-                            e.preventDefault()
-                          }
-                        }}
-                        maxLength={80}
-                        className="md:text-base py-1 font-medium h-auto min-h-auto resize-none"
-                      />
-                    </div>
-
                     {/* Explanation */}
                     <div className="space-y-1">
                       <div className="text-xs font-semibold">

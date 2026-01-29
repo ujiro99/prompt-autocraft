@@ -58,8 +58,6 @@ export interface GeneratedTemplate {
   title: string
   /** Template content (including variables) */
   content: string
-  /** Use case */
-  useCase: string
   /** Cluster explanation */
   clusterExplanation: string
   /** Category ID */
@@ -82,8 +80,6 @@ export interface TemplateCandidate {
   title: string
   /** Template content */
   content: string
-  /** Use case */
-  useCase: string
   /** Cluster explanation */
   clusterExplanation: string
   /** Category ID */

@@ -375,7 +375,6 @@ export function InputMenu(props: Props): React.ReactElement {
           initialName={saveDialogData.name}
           initialContent={saveDialogData.content}
           initialVariables={saveDialogData.variables}
-          initialUseCase={saveDialogData.useCase}
           initialCategoryId={saveDialogData.categoryId}
           initialExcludeFromOrganizer={saveDialogData.excludeFromOrganizer}
           displayMode={saveDialogData.saveMode}

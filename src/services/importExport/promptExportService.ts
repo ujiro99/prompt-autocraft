@@ -61,7 +61,6 @@ export class PromptExportService {
       isAIGenerated: prompt.isAIGenerated ?? false,
       aiMetadata: prompt.aiMetadata ? JSON.stringify(prompt.aiMetadata) : "",
       categoryId: prompt.categoryId ?? "",
-      useCase: prompt.useCase ?? "",
       excludeFromOrganizer: prompt.excludeFromOrganizer ?? false,
     }))
 
@@ -81,7 +80,6 @@ export class PromptExportService {
           "isAIGenerated",
           "aiMetadata",
           "categoryId",
-          "useCase",
           "excludeFromOrganizer",
         ],
         data: csvData,
