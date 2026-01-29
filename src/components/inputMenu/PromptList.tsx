@@ -67,9 +67,9 @@ export const PromptList = ({
   const sortOrder = menuSettings?.sortOrder ?? defaultSortOrder
   const hideOrganizerExcluded = menuSettings?.hideOrganizerExcluded ?? true
 
-  const { filteredGroups, totalCount, aiTemplateGroups } = useMemo(() => {
+  const { filteredGroups, totalCount } = useMemo(() => {
     if (!isLoaded) {
-      return { filteredGroups: [], totalCount: 0, aiTemplateGroups: [] }
+      return { filteredGroups: [], totalCount: 0 }
     }
 
     const query = deferredSearchQuery.toLowerCase()
@@ -88,28 +88,7 @@ export const PromptList = ({
       )
     }
 
-    // For pinned menu, separate user pinned and AI templates
-    if (menuType === "pinned") {
-      // Section A: User pinned prompts (not AI-generated)
-      const userPinned = filtered.filter((p) => !p.isAIGenerated)
-      const userGroups = groupPrompts(userPinned, sortOrder, sideFlipped)
-
-      // Section B: AI generated templates
-      const aiTemplates = filtered.filter((p) => p.isAIGenerated)
-      const aiGroups = groupPrompts(aiTemplates, sortOrder, sideFlipped)
-
-      const count =
-        userGroups.reduce((acc, group) => acc + group.prompts.length, 0) +
-        aiGroups.reduce((acc, group) => acc + group.prompts.length, 0)
-
-      return {
-        filteredGroups: userGroups,
-        aiTemplateGroups: aiGroups,
-        totalCount: count,
-      }
-    }
-
-    // For history menu, show all
+    // Group all prompts together (no separation for AI-generated prompts)
     const groups = groupPrompts(filtered, sortOrder, sideFlipped)
 
     // Calculate total count
@@ -117,7 +96,6 @@ export const PromptList = ({
 
     return {
       filteredGroups: groups,
-      aiTemplateGroups: [],
       totalCount: count,
     }
   }, [
@@ -126,7 +104,6 @@ export const PromptList = ({
     sideFlipped,
     deferredSearchQuery,
     sortOrder,
-    menuType,
     hideOrganizerExcluded,
   ])
 
@@ -243,7 +220,6 @@ export const PromptList = ({
           </div>
         ) : (
           <>
-            {/* Section A: User Pinned Prompts */}
             {filteredGroups.map((group) => (
               <div key={`group-${group.order}`}>
                 <GroupHeader
@@ -276,48 +252,6 @@ export const PromptList = ({
                 ))}
               </div>
             ))}
-
-            {/* Section B: AI Recommended Templates (only for pinned menu) */}
-            {menuType === "pinned" && aiTemplateGroups.length > 0 && (
-              <>
-                <div className="border-t my-1" />
-                <div className="px-3 py-1 text-xs font-semibold text-muted-foreground">
-                  {i18n.t("promptOrganizer.aiTemplates.title")}
-                </div>
-                {aiTemplateGroups.map((group) => (
-                  <div key={`ai-group-${group.order}`}>
-                    <GroupHeader
-                      labelKey={group.label}
-                      count={group.prompts.length}
-                    />
-                    {group.prompts.map((prompt) => (
-                      <MenuItem
-                        menuType={menuType}
-                        value={prompt.id}
-                        key={prompt.id}
-                        isPinned={prompt.isPinned}
-                        onEnter={handleEnter}
-                        onClick={onClick}
-                        onEdit={onEdit}
-                        onRemove={onRemove}
-                        onCopy={onCopy}
-                        onTogglePin={onTogglePin}
-                        testId={testId}
-                        name={prompt.name}
-                        isAIGenerated={prompt.isAIGenerated}
-                        isUnconfirmed={
-                          prompt.isAIGenerated &&
-                          prompt.aiMetadata?.confirmed === false
-                        }
-                        onConfirm={onConfirmTemplate}
-                      >
-                        {prompt.name}
-                      </MenuItem>
-                    ))}
-                  </div>
-                ))}
-              </>
-            )}
           </>
         )}
       </ScrollAreaWithGradient>
