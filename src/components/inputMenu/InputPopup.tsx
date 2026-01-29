@@ -379,7 +379,6 @@ export function InputMenu(props: Props): React.ReactElement {
           initialExcludeFromOrganizer={saveDialogData.excludeFromOrganizer}
           displayMode={saveDialogData.saveMode}
           onSave={handleEditPrompt}
-          isAIGenerated={saveDialogData.isAIGenerated}
         />
       )}
 

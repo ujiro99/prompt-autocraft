@@ -47,8 +47,6 @@ interface EditDialogProps {
   initialCategoryId?: string | null
   /** Initial exclude from organizer flag (when editing) */
   initialExcludeFromOrganizer?: boolean
-  /** Whether the prompt is AI-generated */
-  isAIGenerated?: boolean
   /** Dialog display mode */
   displayMode: SaveMode
   /** Callback on save */
@@ -85,7 +83,6 @@ export const EditDialog: React.FC<EditDialogProps> = ({
   initialVariables,
   initialCategoryId,
   initialExcludeFromOrganizer = false,
-  isAIGenerated,
   displayMode,
   onSave,
 }) => {
@@ -140,7 +137,6 @@ export const EditDialog: React.FC<EditDialogProps> = ({
       setContent(initialContent)
       setVariables(initialVariables || [])
       setCategoryId(initialCategoryId ?? null)
-      setUseCase(initialUseCase)
       setExcludeFromOrganizer(initialExcludeFromOrganizer)
     }
   }, [
@@ -149,7 +145,6 @@ export const EditDialog: React.FC<EditDialogProps> = ({
     initialContent,
     initialVariables,
     initialCategoryId,
-    initialUseCase,
     initialExcludeFromOrganizer,
   ])
 

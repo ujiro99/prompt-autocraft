@@ -49,7 +49,6 @@ describe("OrganizerPreviewDialog", () => {
       id: `t${i + 1}`,
       title: `Template ${i + 1}`,
       content: `Content ${i + 1}`,
-      useCase: `Use case ${i + 1}`,
       clusterExplanation: `Explanation ${i + 1}`,
       categoryId: "cat1",
       variables: [],
@@ -171,7 +170,6 @@ describe("OrganizerPreviewDialog", () => {
 
       // First template details should be displayed
       expect(screen.getByDisplayValue("Template 1")).toBeInTheDocument()
-      expect(screen.getByDisplayValue("Use case 1")).toBeInTheDocument()
     })
 
     it("should change selected template when clicked", async () => {
@@ -194,7 +192,6 @@ describe("OrganizerPreviewDialog", () => {
 
       await waitFor(() => {
         expect(screen.getByDisplayValue("Template 2")).toBeInTheDocument()
-        expect(screen.getByDisplayValue("Use case 2")).toBeInTheDocument()
       })
     })
   })
@@ -219,9 +216,6 @@ describe("OrganizerPreviewDialog", () => {
       ).toBeInTheDocument()
       expect(
         screen.getByText("promptOrganizer.preview.title_label"),
-      ).toBeInTheDocument()
-      expect(
-        screen.getByText("promptOrganizer.preview.useCase"),
       ).toBeInTheDocument()
       expect(
         screen.getByText("promptOrganizer.preview.category"),
@@ -287,26 +281,6 @@ describe("OrganizerPreviewDialog", () => {
       fireEvent.change(titleInput, { target: { value: "Updated Title" } })
 
       expect(screen.getByDisplayValue("Updated Title")).toBeInTheDocument()
-    })
-
-    it("should update use case when changed", () => {
-      const templates = createTemplates(1)
-
-      render(
-        <TestWrapper>
-          <OrganizerPreviewDialog
-            open={true}
-            onOpenChange={mockOnOpenChange}
-            templates={templates}
-            onSave={mockOnSave}
-          />
-        </TestWrapper>,
-      )
-
-      const useCaseInput = screen.getByDisplayValue("Use case 1")
-      fireEvent.change(useCaseInput, { target: { value: "Updated Use Case" } })
-
-      expect(screen.getByDisplayValue("Updated Use Case")).toBeInTheDocument()
     })
 
     it("should update content when changed", () => {

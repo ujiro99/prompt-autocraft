@@ -111,7 +111,6 @@ describe("PromptImportService", () => {
     isAIGenerated: undefined,
     aiMetadata: undefined,
     categoryId: undefined,
-    useCase: undefined,
     ...overrides,
   })
 
@@ -129,7 +128,6 @@ describe("PromptImportService", () => {
     isAIGenerated: undefined,
     aiMetadata: undefined,
     categoryId: undefined,
-    useCase: undefined,
     ...overrides,
   })
 
@@ -480,14 +478,12 @@ newline and, comma",1,2024-01-10T10:00:00.000Z,false,https://example.com,2024-01
           showInPinned: true,
         }),
         categoryId: "cat-123",
-        useCase: "Code review automation",
       })
 
       const result = (service as any).parseRowData(rowData, new Set())
 
       expect(result.isAIGenerated).toBe(true)
       expect(result.categoryId).toBe("cat-123")
-      expect(result.useCase).toBe("Code review automation")
       expect(result.aiMetadata).toBeDefined()
       expect(result.aiMetadata.sourcePromptIds).toEqual(["id1", "id2", "id3"])
       expect(result.aiMetadata.sourceCount).toBe(3)
@@ -505,7 +501,6 @@ newline and, comma",1,2024-01-10T10:00:00.000Z,false,https://example.com,2024-01
       expect(result.isAIGenerated).toBeUndefined()
       expect(result.aiMetadata).toBeUndefined()
       expect(result.categoryId).toBeUndefined()
-      expect(result.useCase).toBeUndefined()
     })
 
     it("should handle empty string values", () => {
@@ -513,7 +508,6 @@ newline and, comma",1,2024-01-10T10:00:00.000Z,false,https://example.com,2024-01
         isAIGenerated: "",
         aiMetadata: "",
         categoryId: "",
-        useCase: "",
       })
 
       const result = (service as any).parseRowData(rowData, new Set())
@@ -521,7 +515,6 @@ newline and, comma",1,2024-01-10T10:00:00.000Z,false,https://example.com,2024-01
       expect(result.isAIGenerated).toBeUndefined()
       expect(result.aiMetadata).toBeUndefined()
       expect(result.categoryId).toBeUndefined()
-      expect(result.useCase).toBeUndefined()
     })
 
     it("should handle invalid aiMetadata JSON gracefully", () => {
