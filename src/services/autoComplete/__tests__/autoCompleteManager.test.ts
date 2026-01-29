@@ -527,6 +527,148 @@ describe("AutoCompleteManager", () => {
         matches.map((m) => ({ name: m.name, searchTerm: m.searchTerm })),
       )
     })
+
+    it('should show only pinned prompts when "//" is typed', () => {
+      const managerAny = manager as any
+
+      // Add some pinned prompts
+      const pinnedPrompts = [
+        ...mockPrompts,
+        {
+          id: "pinned-1",
+          name: "Pinned Prompt 1",
+          content: "This is a pinned prompt",
+          executionCount: 0,
+          lastExecutedAt: new Date(),
+          isPinned: true,
+          lastExecutionUrl: "",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: "pinned-2",
+          name: "Another Pinned",
+          content: "Another pinned prompt",
+          executionCount: 0,
+          lastExecutedAt: new Date(),
+          isPinned: true,
+          lastExecutionUrl: "",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]
+      manager.setPrompts(pinnedPrompts)
+
+      const input = "//"
+      const caretPos = { position: 2, newlineCount: 0 }
+      const matches = managerAny.findMatches(input, caretPos)
+
+      // Should only show pinned prompts
+      expect(matches).toHaveLength(2)
+      expect(matches.every((m: AutoCompleteMatch) => m.isPinned)).toBe(true)
+      expect(matches[0].name).toBe("Pinned Prompt 1")
+      expect(matches[1].name).toBe("Another Pinned")
+      expect(matches[0].searchTerm).toBe("//")
+    })
+
+    it('should show pinned prompts when "//" is typed after other text', () => {
+      const managerAny = manager as any
+
+      // Add a pinned prompt
+      const pinnedPrompts = [
+        ...mockPrompts,
+        {
+          id: "pinned-1",
+          name: "Pinned Prompt",
+          content: "This is a pinned prompt",
+          executionCount: 0,
+          lastExecutedAt: new Date(),
+          isPinned: true,
+          lastExecutionUrl: "",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]
+      manager.setPrompts(pinnedPrompts)
+
+      const input = "Type some text //"
+      const caretPos = { position: 17, newlineCount: 0 }
+      const matches = managerAny.findMatches(input, caretPos)
+
+      // Should only show pinned prompts
+      expect(matches).toHaveLength(1)
+      expect(matches[0].isPinned).toBe(true)
+      expect(matches[0].name).toBe("Pinned Prompt")
+      expect(matches[0].matchStart).toBe(15) // Position of "//"
+      expect(matches[0].matchEnd).toBe(17)
+    })
+
+    it('should return empty array when "//" is typed but no pinned prompts exist', () => {
+      const managerAny = manager as any
+
+      // Ensure all prompts are unpinned
+      manager.setPrompts(mockPrompts)
+
+      const input = "//"
+      const caretPos = { position: 2, newlineCount: 0 }
+      const matches = managerAny.findMatches(input, caretPos)
+
+      expect(matches).toHaveLength(0)
+    })
+
+    it('should respect maxMatches limit for "//" pinned prompts', () => {
+      // Create manager with maxMatches = 2
+      const limitedManager = new AutoCompleteManager({
+        maxMatches: 2,
+      })
+
+      // Add 3 pinned prompts
+      const pinnedPrompts = [
+        {
+          id: "pinned-1",
+          name: "Pinned Prompt 1",
+          content: "First pinned prompt",
+          executionCount: 0,
+          lastExecutedAt: new Date(),
+          isPinned: true,
+          lastExecutionUrl: "",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: "pinned-2",
+          name: "Pinned Prompt 2",
+          content: "Second pinned prompt",
+          executionCount: 0,
+          lastExecutedAt: new Date(),
+          isPinned: true,
+          lastExecutionUrl: "",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: "pinned-3",
+          name: "Pinned Prompt 3",
+          content: "Third pinned prompt",
+          executionCount: 0,
+          lastExecutedAt: new Date(),
+          isPinned: true,
+          lastExecutionUrl: "",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]
+      limitedManager.setPrompts(pinnedPrompts)
+      const limitedManagerAny = limitedManager as any
+
+      const input = "//"
+      const caretPos = { position: 2, newlineCount: 0 }
+      const matches = limitedManagerAny.findMatches(input, caretPos)
+
+      // Should only return 2 matches (limited by maxMatches)
+      expect(matches).toHaveLength(2)
+      expect(matches.every((m: AutoCompleteMatch) => m.isPinned)).toBe(true)
+    })
   })
 
   describe("AutoCompleteManager integration", () => {
