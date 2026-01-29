@@ -669,6 +669,149 @@ describe("AutoCompleteManager", () => {
       expect(matches).toHaveLength(2)
       expect(matches.every((m: AutoCompleteMatch) => m.isPinned)).toBe(true)
     })
+
+    it('should not trigger "//" for URLs like "http://"', () => {
+      const managerAny = manager as any
+
+      // Add a pinned prompt
+      const pinnedPrompts = [
+        ...mockPrompts,
+        {
+          id: "pinned-1",
+          name: "Pinned Prompt",
+          content: "This is a pinned prompt",
+          executionCount: 0,
+          lastExecutedAt: new Date(),
+          isPinned: true,
+          lastExecutionUrl: "",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]
+      manager.setPrompts(pinnedPrompts)
+
+      const input = "http://"
+      const caretPos = { position: 7, newlineCount: 0 }
+      const matches = managerAny.findMatches(input, caretPos)
+
+      // Should not trigger pinned-only autocomplete (URL context)
+      expect(matches).toHaveLength(0)
+    })
+
+    it('should not trigger "//" when embedded in a word like "abc//"', () => {
+      const managerAny = manager as any
+
+      // Add a pinned prompt
+      const pinnedPrompts = [
+        ...mockPrompts,
+        {
+          id: "pinned-1",
+          name: "Pinned Prompt",
+          content: "This is a pinned prompt",
+          executionCount: 0,
+          lastExecutedAt: new Date(),
+          isPinned: true,
+          lastExecutionUrl: "",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]
+      manager.setPrompts(pinnedPrompts)
+
+      const input = "abc//"
+      const caretPos = { position: 5, newlineCount: 0 }
+      const matches = managerAny.findMatches(input, caretPos)
+
+      // Should not trigger pinned-only autocomplete (embedded in word)
+      expect(matches).toHaveLength(0)
+    })
+
+    it('should not trigger for triple slash "///"', () => {
+      const managerAny = manager as any
+
+      // Add a pinned prompt
+      const pinnedPrompts = [
+        ...mockPrompts,
+        {
+          id: "pinned-1",
+          name: "Pinned Prompt",
+          content: "This is a pinned prompt",
+          executionCount: 0,
+          lastExecutedAt: new Date(),
+          isPinned: true,
+          lastExecutionUrl: "",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]
+      manager.setPrompts(pinnedPrompts)
+
+      const input = "///"
+      const caretPos = { position: 3, newlineCount: 0 }
+      const matches = managerAny.findMatches(input, caretPos)
+
+      // Should not trigger pinned-only autocomplete (too many slashes)
+      expect(matches).toHaveLength(0)
+    })
+
+    it('should trigger "//" when it starts the input', () => {
+      const managerAny = manager as any
+
+      // Add a pinned prompt
+      const pinnedPrompts = [
+        ...mockPrompts,
+        {
+          id: "pinned-1",
+          name: "Pinned Prompt",
+          content: "This is a pinned prompt",
+          executionCount: 0,
+          lastExecutedAt: new Date(),
+          isPinned: true,
+          lastExecutionUrl: "",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]
+      manager.setPrompts(pinnedPrompts)
+
+      const input = "//"
+      const caretPos = { position: 2, newlineCount: 0 }
+      const matches = managerAny.findMatches(input, caretPos)
+
+      // Should trigger pinned-only autocomplete
+      expect(matches).toHaveLength(1)
+      expect(matches[0].isPinned).toBe(true)
+    })
+
+    it('should trigger "//" when preceded by whitespace', () => {
+      const managerAny = manager as any
+
+      // Add a pinned prompt
+      const pinnedPrompts = [
+        ...mockPrompts,
+        {
+          id: "pinned-1",
+          name: "Pinned Prompt",
+          content: "This is a pinned prompt",
+          executionCount: 0,
+          lastExecutedAt: new Date(),
+          isPinned: true,
+          lastExecutionUrl: "",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]
+      manager.setPrompts(pinnedPrompts)
+
+      const input = "Some text //"
+      const caretPos = { position: 12, newlineCount: 0 }
+      const matches = managerAny.findMatches(input, caretPos)
+
+      // Should trigger pinned-only autocomplete
+      expect(matches).toHaveLength(1)
+      expect(matches[0].isPinned).toBe(true)
+      expect(matches[0].matchStart).toBe(10) // Position of "//"
+    })
   })
 
   describe("AutoCompleteManager integration", () => {

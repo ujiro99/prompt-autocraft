@@ -102,7 +102,7 @@ export class AutoCompleteManager {
   /**
    * Find matching prompts and presets based on input and caret position
    * Supports matching 1-3 words, prioritizing longer matches
-   * Special case: "//" triggers pinned-only autocomplete
+   * Special case: "//" triggers pinned-only autocomplete when at start or after whitespace
    */
   private findMatches(
     input: string,
@@ -111,7 +111,8 @@ export class AutoCompleteManager {
     const textBeforeCaret = input.substring(0, caret.position)
 
     // Special case: Check if user typed "//" to show pinned prompts only
-    if (textBeforeCaret.endsWith("//")) {
+    // Only trigger if "//" is at the start or preceded by whitespace
+    if (textBeforeCaret === "//" || textBeforeCaret.match(/\s\/\/$/)) {
       return this.findPinnedPrompts(caret)
     }
 
