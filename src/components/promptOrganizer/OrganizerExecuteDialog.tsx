@@ -175,10 +175,6 @@ export const OrganizerExecuteDialog: React.FC<Props> = ({
     onOpenChange(false)
   }
 
-  const handleOpenSettings = () => {
-    setSettingsDialogOpen(true)
-  }
-
   const hasPendingTemplates = pendingTemplates && pendingTemplates.length > 0
 
   return (
