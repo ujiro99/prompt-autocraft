@@ -18,14 +18,14 @@ import {
  */
 const DEFAULT_TIMEOUT = 30000
 
-interface ImproveLog {
+export interface ImproveLog {
   start_line: number
   end_line: number
   description: string
   benefit: string
 }
 
-interface ImproveResponse {
+export interface ImproveResponse {
   improvedPrompt: string
   changeLog: ImproveLog[]
 }
@@ -169,7 +169,7 @@ ${prompt}
       this.clearTimeout()
 
       // Call completion callback
-      onComplete?.(improvedPrompt)
+      onComplete?.(improvedPrompt, response.changeLog)
     } catch (error) {
       // Clear timeout on error
       this.clearTimeout()

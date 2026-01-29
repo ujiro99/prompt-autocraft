@@ -6,6 +6,7 @@ import { VariableExpansionInfoDialog } from "./VariableExpansionInfoDialog"
 import { PromptImproverSettingsDialog } from "@/components/settings/PromptImproverSettingsDialog"
 import { ModelSettingsDialog } from "@/components/settings/ModelSettingsDialog"
 import { ApiKeyWarningBanner } from "@/components/shared/ApiKeyWarningBanner"
+import type { ImproveLog } from "@/services/promptImprover/improverService"
 import {
   Dialog,
   DialogTitle,
@@ -26,6 +27,9 @@ import { ImproverService } from "@/services/promptImprover/improverService"
 import { stopPropagation } from "@/utils/dom"
 import { mergeVariableConfigs } from "@/utils/variables/variableParser"
 import { improvePromptSettingsStorage } from "@/services/storage/definitions"
+import { ImprovementExplanationPanel } from "./ImprovementExplanationPanel"
+import { LineHighlightOverlay } from "./LineHighlightOverlay"
+import { ConnectingLines } from "./ConnectingLines"
 
 /**
  * Props for prompt edit dialog
@@ -69,6 +73,10 @@ export const PromptImproverDialog: React.FC<PromptImproveDialogProps> = ({
   const promptImproverRef = useRef<ImproverService | null>(null)
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false)
   const [modelSettingsDialogOpen, setModelSettingsDialogOpen] = useState(false)
+  const [changeLog, setChangeLog] = useState<ImproveLog[]>([])
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([])
 
   // Check if variable expansion is enabled (default: true)
   const variableExpansionEnabled = settings?.variableExpansionEnabled ?? true
@@ -112,6 +120,8 @@ export const PromptImproverDialog: React.FC<PromptImproveDialogProps> = ({
       setVariables(initialVariables || [])
       setImprovedContent("")
       setImprovementError(null)
+      setChangeLog([])
+      setHoveredIndex(null)
       // Cancel ongoing improvement if any
       cancelImprovement()
     }
@@ -154,9 +164,10 @@ export const PromptImproverDialog: React.FC<PromptImproveDialogProps> = ({
         onStream: (chunk) => {
           setImprovedContent((prev) => prev + chunk)
         },
-        onComplete: (improved) => {
+        onComplete: (improved, logs) => {
           setIsImproving(false)
           setImprovedContent(improved)
+          setChangeLog(logs || [])
         },
         onError: (error) => {
           setIsImproving(false)
@@ -182,6 +193,27 @@ export const PromptImproverDialog: React.FC<PromptImproveDialogProps> = ({
     cancelImprovement()
     setImprovedContent("")
     setImprovementError(null)
+  }
+
+  /**
+   * Scroll to specific line in the textarea
+   */
+  const handleScrollToLine = (startLine: number, _endLine: number) => {
+    if (!textareaRef.current) return
+
+    // Calculate line height
+    const computedStyle = getComputedStyle(textareaRef.current)
+    const lineHeight = parseFloat(computedStyle.lineHeight) || 20
+
+    // Calculate target position (center the range in viewport)
+    const targetScrollTop =
+      (startLine - 1) * lineHeight - textareaRef.current.clientHeight / 2
+
+    // Smooth scroll
+    textareaRef.current.scrollTo({
+      top: Math.max(0, targetScrollTop),
+      behavior: "smooth",
+    })
   }
 
   /**
@@ -237,7 +269,10 @@ export const PromptImproverDialog: React.FC<PromptImproveDialogProps> = ({
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent
           container={container}
-          className="w-xl sm:max-w-xl max-h-9/10"
+          className={cn(
+            "max-h-9/10",
+            changeLog.length > 0 ? "w-full max-w-6xl" : "w-xl sm:max-w-xl",
+          )}
           onKeyDown={handleKeyDown}
           {...stopPropagation()}
         >
@@ -300,60 +335,101 @@ export const PromptImproverDialog: React.FC<PromptImproveDialogProps> = ({
                     {improvementError}
                   </div>
                 ) : (
-                  <div className="relative">
-                    <Textarea
-                      value={improvedContent}
-                      readOnly
-                      className="max-h-60 bg-muted/50"
-                      rows={6}
-                      placeholder={
-                        isImproving
-                          ? i18n.t("dialogs.promptImprove.improving")
-                          : ""
-                      }
-                    />
-                    {improvedContent.trim() === "" && !isImproving && (
-                      <div className="absolute inset-0 flex items-center justify-center gap-1 bg-background/50">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={handleImprove}
-                          className={cn(
-                            "flex items-center",
-                            "bg-gradient-to-r from-purple-50 to-blue-50",
-                            "border-purple-200 hover:border-purple-300",
-                            "hover:from-purple-100 hover:to-blue-100",
-                            "text-purple-700 hover:text-purple-800",
-                            "transition-all duration-200",
-                          )}
-                          disabled={
-                            isImproving ||
-                            isLoading ||
-                            !content.trim() ||
-                            !isApiKeyConfigured
-                          }
-                        >
-                          <Sparkles
-                            className="mr-0.5 size-4"
-                            fill="url(#lucideGradient)"
-                          />
-                          {i18n.t("dialogs.promptImprove.improveButton")}
-                        </Button>
+                  <div
+                    className={cn(
+                      "space-y-2",
+                      changeLog.length > 0 &&
+                        "grid grid-cols-[1fr_60px_400px] gap-4",
+                    )}
+                  >
+                    {/* Left: Improved prompt with overlay */}
+                    <div className="relative">
+                      <Textarea
+                        ref={textareaRef}
+                        value={improvedContent}
+                        readOnly
+                        className="max-h-60 bg-muted/50 font-mono"
+                        rows={6}
+                        placeholder={
+                          isImproving
+                            ? i18n.t("dialogs.promptImprove.improving")
+                            : ""
+                        }
+                      />
+                      {changeLog.length > 0 && (
+                        <LineHighlightOverlay
+                          improvements={changeLog}
+                          hoveredIndex={hoveredIndex}
+                          textareaRef={textareaRef}
+                        />
+                      )}
+                      {improvedContent.trim() === "" && !isImproving && (
+                        <div className="absolute inset-0 flex items-center justify-center gap-1 bg-background/50">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={handleImprove}
+                            className={cn(
+                              "flex items-center",
+                              "bg-gradient-to-r from-purple-50 to-blue-50",
+                              "border-purple-200 hover:border-purple-300",
+                              "hover:from-purple-100 hover:to-blue-100",
+                              "text-purple-700 hover:text-purple-800",
+                              "transition-all duration-200",
+                            )}
+                            disabled={
+                              isImproving ||
+                              isLoading ||
+                              !content.trim() ||
+                              !isApiKeyConfigured
+                            }
+                          >
+                            <Sparkles
+                              className="mr-0.5 size-4"
+                              fill="url(#lucideGradient)"
+                            />
+                            {i18n.t("dialogs.promptImprove.improveButton")}
+                          </Button>
+                        </div>
+                      )}
+                      {isImproving && (
+                        <div className="absolute inset-0 flex items-center justify-center gap-1 bg-background/50">
+                          <Loader2 className="ml-5 size-6 animate-spin text-primary" />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={handleCancelImprovement}
+                            className="text-xs"
+                          >
+                            {i18n.t("common.cancel")}
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Middle: Connecting lines */}
+                    {changeLog.length > 0 && (
+                      <div className="relative">
+                        <ConnectingLines
+                          improvements={changeLog}
+                          textareaRef={textareaRef}
+                          cardRefs={cardRefs}
+                          hoveredIndex={hoveredIndex}
+                          promptContent={improvedContent}
+                        />
                       </div>
                     )}
-                    {isImproving && (
-                      <div className="absolute inset-0 flex items-center justify-center gap-1 bg-background/50">
-                        <Loader2 className="ml-5 size-6 animate-spin text-primary" />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={handleCancelImprovement}
-                          className="text-xs"
-                        >
-                          {i18n.t("common.cancel")}
-                        </Button>
-                      </div>
+
+                    {/* Right: Explanation cards */}
+                    {changeLog.length > 0 && (
+                      <ImprovementExplanationPanel
+                        improvements={changeLog}
+                        hoveredIndex={hoveredIndex}
+                        onHoverChange={setHoveredIndex}
+                        onImprovementClick={handleScrollToLine}
+                        cardRefs={cardRefs}
+                      />
                     )}
                   </div>
                 )}

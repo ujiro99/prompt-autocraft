@@ -1,4 +1,5 @@
 import { GenerateContentConfig } from "@google/genai"
+import type { ImproveLog } from "../promptImprover/improverService"
 
 /**
  * Type definitions for Gemini AI service
@@ -13,7 +14,7 @@ export interface ImproveOptions {
   /** Streaming callback - called for each chunk received */
   onStream?: (chunk: string) => void
   /** Completion callback - called when streaming is complete */
-  onComplete?: (improvedPrompt: string) => void
+  onComplete?: (improvedPrompt: string, changeLog?: ImproveLog[]) => void
   /** Error callback - called when an error occurs */
   onError?: (error: Error) => void
 }
