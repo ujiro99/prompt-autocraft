@@ -349,6 +349,7 @@ export const CategoryEditor = ({
                 e.stopPropagation()
                 setIsAddingCategory(true)
               }}
+              aria-label={i18n.t("organizer.category.addCategory")}
             >
               <Plus className="h-3 w-3" />
               {i18n.t("organizer.category.addCategory")}
