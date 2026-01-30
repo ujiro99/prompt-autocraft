@@ -20,7 +20,6 @@ describe("TemplateConverter", () => {
   ): GeneratedTemplate => ({
     title: "Test Template",
     content: "Test content with {{variable1}} and {{variable2}}",
-    useCase: "Test use case",
     clusterExplanation: "Test cluster explanation",
     categoryId: "test-category",
     sourcePromptIds: ["id1", "id2", "id3"],
@@ -217,7 +216,6 @@ describe("TemplateConverter", () => {
       expect(candidate).toMatchObject({
         title: "Test Template",
         content: "Test content with {{variable1}} and {{variable2}}",
-        useCase: "Test use case",
         categoryId: "test-category",
         userAction: "pending",
       })
@@ -406,7 +404,6 @@ describe("TemplateConverter", () => {
       id: "candidate-id",
       title: "Test Template",
       content: "Test content",
-      useCase: "Test use case",
       clusterExplanation: "Test cluster explanation",
       categoryId: "test-category",
       variables: [
@@ -430,7 +427,6 @@ describe("TemplateConverter", () => {
       expect(prompt).toMatchObject({
         name: "Test Template",
         content: "Test content",
-        useCase: "Test use case",
         categoryId: "test-category",
         executionCount: 0,
         isPinned: false,

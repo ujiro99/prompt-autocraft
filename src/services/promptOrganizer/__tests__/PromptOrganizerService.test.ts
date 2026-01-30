@@ -30,7 +30,6 @@ const {
         {
           title: "Test Template",
           content: "Test {{variable}}",
-          useCase: "Test use case",
           categoryId: "test-cat",
           sourcePromptIds: ["1", "2", "3"],
           variables: [
@@ -209,7 +208,6 @@ describe("PromptOrganizerService", () => {
       expect(candidate).toMatchObject({
         title: "Test Template",
         content: "Test {{variable}}",
-        useCase: "Test use case",
         categoryId: "test-cat",
         userAction: "pending",
       })
@@ -229,7 +227,6 @@ describe("PromptOrganizerService", () => {
           {
             title: "Title",
             content: "Content",
-            useCase: "Use case",
             categoryId: "non-existent-cat",
             sourcePromptIds: ["1"],
             variables: [],
@@ -250,7 +247,6 @@ describe("PromptOrganizerService", () => {
           {
             title: "Title",
             content: "Content",
-            useCase: "Use case",
             categoryId: "test-cat",
             sourcePromptIds: ["1", "2", "3"],
             variables: [
@@ -273,7 +269,6 @@ describe("PromptOrganizerService", () => {
           {
             title: "Title",
             content: "Content",
-            useCase: "Use case",
             categoryId: "test-cat",
             sourcePromptIds: ["1", "2"],
             variables: [
@@ -296,7 +291,6 @@ describe("PromptOrganizerService", () => {
           {
             title: "Title",
             content: "Content",
-            useCase: "Use case",
             categoryId: "test-cat",
             sourcePromptIds: ["1", "2", "3"],
             variables: [{ name: "var1", description: "Var 1" }],
@@ -324,7 +318,6 @@ describe("PromptOrganizerService", () => {
           {
             title: "Template 1",
             content: "Content 1",
-            useCase: "Use case 1",
             categoryId: "test-cat",
             sourcePromptIds: ["1"],
             variables: [],
@@ -332,7 +325,6 @@ describe("PromptOrganizerService", () => {
           {
             title: "Template 2",
             content: "Content 2",
-            useCase: "Use case 2",
             categoryId: "test-cat",
             sourcePromptIds: ["2"],
             variables: [],
@@ -438,7 +430,6 @@ describe("PromptOrganizerService", () => {
           id: "1",
           title: "Test",
           content: "Content",
-          useCase: "Use case",
           clusterExplanation: "Test explanation",
           categoryId: "cat",
           variables: [],

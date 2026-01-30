@@ -134,7 +134,7 @@ const PromptMetadata = ({ prompt }: { prompt: Prompt }) => {
 
   return (
     <div className="flex justify-between">
-      {prompt.categoryId || prompt.useCase ? (
+      {prompt.categoryId ? (
         <div className="space-y-1 text-xs pr-2">
           {prompt.categoryId && (
             <div className="flex items-start gap-1.5">
@@ -144,14 +144,6 @@ const PromptMetadata = ({ prompt }: { prompt: Prompt }) => {
               <span className="text-foreground">
                 {getCategoryName(prompt.categoryId) || prompt.categoryId}
               </span>
-            </div>
-          )}
-          {prompt.useCase && (
-            <div className="flex items-start gap-1.5">
-              <span className="text-muted-foreground text-nowrap">
-                {i18n.t("promptOrganizer.preview.useCase")}:
-              </span>
-              <span className="text-foreground">{prompt.useCase}</span>
             </div>
           )}
         </div>

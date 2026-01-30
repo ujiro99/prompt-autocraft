@@ -140,14 +140,6 @@ export const OrganizerResultDialog: React.FC<OrganizerResultDialogProps> = ({
                         <span>{exampleTemplate.title}</span>
                       </p>
                     </div>
-                    <div className="space-y-0.5">
-                      <p className="text-xs font-semibold">
-                        {i18n.t("promptOrganizer.preview.useCase")}:
-                      </p>
-                      <p className="text-base font-medium text-muted-foreground">
-                        <span>{exampleTemplate.useCase}</span>
-                      </p>
-                    </div>
                     {category && (
                       <div className="flex items-center gap-2">
                         <p className="text-xs font-semibold">

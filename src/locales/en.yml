@@ -68,8 +68,6 @@ dialogs:
   edit:
     title: Edit Prompt
     description: Edit the details of the prompt.
-    useCaseDescription: Describe the use case or purpose
-    useCasePlaceholder: Optional
     categoryDescription: Set category for classification
     excludeFromOrganizer: Exclude from prompt organization
     excludeFromOrganizerHelp: Check to exclude from automatic organization. Prompts that have been organized/refined will be automatically checked.
@@ -522,7 +520,6 @@ promptOrganizer:
     noTemplates: No prompts to display.
     selectionRequired: Please select prompts from the list.
     title_label: Title
-    useCase: Use Case
     category: Category
     explanation: About Refinement by AI
     content: Prompt Content

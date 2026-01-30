@@ -274,9 +274,8 @@ export class PromptImportService {
       // For false/0/"false", keep as undefined
     }
 
-    // Parse categoryId and useCase
+    // Parse categoryId
     const categoryId = row.categoryId || undefined
-    const useCase = row.useCase || undefined
 
     // Parse excludeFromOrganizer
     const excludeFromOrganizer =
@@ -301,7 +300,6 @@ export class PromptImportService {
       isAIGenerated,
       aiMetadata,
       categoryId,
-      useCase,
       excludeFromOrganizer,
     }
   }

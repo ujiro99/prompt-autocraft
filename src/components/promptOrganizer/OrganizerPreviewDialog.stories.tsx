@@ -9,7 +9,6 @@ const mockTemplates: TemplateCandidate[] = [
     id: "1",
     title: "Code Review Template",
     content: "Review the following code:\n{{code}}",
-    useCase: "For reviewing code snippets",
     clusterExplanation:
       "This template helps review code by providing structured feedback on code quality, best practices, and potential improvements.",
     categoryId: "dev",
@@ -33,7 +32,6 @@ const mockTemplates: TemplateCandidate[] = [
     title: "Bug Report Template",
     content:
       "Report a bug:\n**Description:** {{description}}\n**Steps to reproduce:** {{steps}}\n**Expected result:** {{expected}}\n**Actual result:** {{actual}}",
-    useCase: "For reporting bugs in detail",
     clusterExplanation:
       "A comprehensive bug report template that ensures all necessary information is captured for effective debugging.",
     categoryId: "dev",
@@ -72,7 +70,6 @@ const mockTemplates: TemplateCandidate[] = [
     title: "Meeting Summary",
     content:
       "Summarize the following meeting:\n**Date:** {{date}}\n**Attendees:** {{attendees}}\n**Topics:** {{topics}}\n**Action Items:** {{actions}}",
-    useCase: "For creating meeting summaries",
     clusterExplanation:
       "Captures key points from meetings including attendees, topics discussed, and action items for follow-up.",
     categoryId: "general",
@@ -233,7 +230,6 @@ export const OpenWithManyVariables: Story = {
         title: "Complex Template with Many Variables",
         content:
           "{{var1}} {{var2}} {{var3}} {{var4}} {{var5}} {{var6}} {{var7}} {{var8}}",
-        useCase: "Template with many variables for testing",
         clusterExplanation:
           "This template demonstrates handling of multiple variables in a single template.",
         categoryId: "dev",
@@ -293,7 +289,6 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 
 ## Section 7
 {{placeholder3}}`,
-        useCase: "Testing long content scrolling",
         clusterExplanation:
           "This template is designed to test the UI's handling of lengthy content and ensure proper scrolling functionality.",
         categoryId: "general",

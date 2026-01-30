@@ -20,7 +20,6 @@ const { mockGeminiClient, mockGenaiApiKeyStorage, mockSystemInstruction } =
             {
               title: "Test Template",
               content: "Test {{variable}}",
-              useCase: "Test use case",
               clusterExplanation: "Test explanation",
               categoryId: "test-cat",
               sourcePromptIds: ["1", "2"],
@@ -35,7 +34,6 @@ const { mockGeminiClient, mockGenaiApiKeyStorage, mockSystemInstruction } =
             {
               title: "Test Template",
               content: "Test {{variable}}",
-              useCase: "Test use case",
               clusterExplanation: "Test explanation",
               categoryId: "test-cat",
               sourcePromptIds: ["1", "2"],
@@ -266,7 +264,6 @@ describe("TemplateGeneratorService", () => {
       expect(result.templates[0]).toMatchObject({
         title: "Test Template",
         content: "Test {{variable}}",
-        useCase: "Test use case",
         categoryId: "test-cat",
       })
       expect(result.usage).toMatchObject({
@@ -313,7 +310,6 @@ describe("TemplateGeneratorService", () => {
           {
             title: "Template 1",
             content: "Content 1 {{var1}}",
-            useCase: "Use case 1",
             clusterExplanation: "Explanation 1",
             categoryId: "cat1",
             sourcePromptIds: ["1"],
@@ -322,7 +318,6 @@ describe("TemplateGeneratorService", () => {
           {
             title: "Template 2",
             content: "Content 2 {{var2}}",
-            useCase: "Use case 2",
             clusterExplanation: "Explanation 2",
             categoryId: "cat2",
             sourcePromptIds: ["2"],

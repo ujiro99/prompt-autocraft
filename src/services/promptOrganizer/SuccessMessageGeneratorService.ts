@@ -64,7 +64,6 @@ export class SuccessMessageGeneratorService {
     const inputData = {
       title: template.title,
       content: template.content,
-      useCase: template.useCase,
       clusterExplanation: template.clusterExplanation,
       category: categories.find((c) => c.id === template.categoryId)?.name,
       sourcePromptCount: template.sourcePromptIds.length,

@@ -12,7 +12,6 @@ const { mockTemplateConverter, mockPromptsService, mockPinsService } =
           id: `prompt-${candidate.id}`,
           name: candidate.title,
           content: candidate.content,
-          useCase: candidate.useCase,
           categoryId: candidate.categoryId,
           variables: candidate.variables,
           executionCount: 0,
@@ -74,7 +73,6 @@ describe("TemplateSaveService", () => {
     id: "candidate-1",
     title: "Test Template",
     content: "Test content",
-    useCase: "Test use case",
     clusterExplanation: "Test cluster explanation",
     categoryId: "test-category",
     variables: [],
@@ -224,7 +222,6 @@ describe("TemplateSaveService", () => {
         id: "test-id",
         title: "Test Title",
         content: "Test Content",
-        useCase: "Test Use Case",
         categoryId: "test-cat",
         userAction: "save_and_pin",
         variables: [
@@ -246,7 +243,6 @@ describe("TemplateSaveService", () => {
         id: "prompt-test-id",
         name: "Test Title",
         content: "Test Content",
-        useCase: "Test Use Case",
         categoryId: "test-cat",
         isPinned: true,
       })

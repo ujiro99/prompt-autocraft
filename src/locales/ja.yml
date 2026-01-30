@@ -68,8 +68,6 @@ dialogs:
   edit:
     title: プロンプトを編集
     description: プロンプトの詳細を編集します。
-    useCaseDescription: 使用例や目的を説明します
-    useCasePlaceholder: 任意入力
     categoryDescription: 分類用のカテゴリを設定します
     excludeFromOrganizer: プロンプト整理の対象外
     excludeFromOrganizerHelp: チェックすると、自動整理の対象から除外します。整理・精製されたプロンプトは、自動的にチェックが入ります。
@@ -522,7 +520,6 @@ promptOrganizer:
     noTemplates: 表示するプロンプトがありません。
     selectionRequired: リストからプロンプトを選択してください。
     title_label: タイトル
-    useCase: 用途
     category: カテゴリ
     explanation: 解説 by AI
     content: プロンプト内容

@@ -132,8 +132,6 @@ export interface Prompt {
   aiMetadata?: AIGeneratedMetadata
   /** Category ID (null for uncategorized) */
   categoryId?: string | null
-  /** Use case description (optional) */
-  useCase?: string
   /** Exclude from prompt organizer flag */
   excludeFromOrganizer?: boolean
 }
@@ -185,7 +183,6 @@ export interface SaveDialogData
     | "isAIGenerated"
     | "aiMetadata"
     | "categoryId"
-    | "useCase"
     | "excludeFromOrganizer"
   > {
   /** Save mode */

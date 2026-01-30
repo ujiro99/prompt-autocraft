@@ -91,11 +91,6 @@ export const TemplateCandidateCard = forwardRef<
         {/* Header: Title and Status */}
         <h3 className="font-semibold text-sm break-all">{candidate.title}</h3>
 
-        {/* Use case */}
-        <p className="text-xs text-mute-foreground break-all">
-          {candidate.useCase}
-        </p>
-
         {/* Footer: Source count */}
         <div className="flex items-center text-xs text-neutral-500 pt-1">
           <span>
