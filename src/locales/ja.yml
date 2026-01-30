@@ -547,3 +547,11 @@ organizer:
     documentCreation: ドキュメント作成
     development: 開発・技術
     other: その他
+    addCategory: カテゴリを追加
+    addCategoryPlaceholder: カテゴリ名を入力...
+    renameCategory: 名称変更
+    deleteCategory: 削除
+    confirmDeleteTitle: カテゴリを削除
+    confirmDeleteMessage: このカテゴリを削除してもよろしいですか？この操作は元に戻すことができません。
+    categoryNameRequired: カテゴリ名は必須です
+    renameCategoryPlaceholder: 新しいカテゴリ名を入力...

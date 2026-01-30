@@ -327,6 +327,7 @@ export const EditDialog: React.FC<EditDialogProps> = ({
                   value={categoryId || ""}
                   onValueChange={(value) => setCategoryId(value || null)}
                   className="flex-1"
+                  editable={true}
                 />
               </div>
 
