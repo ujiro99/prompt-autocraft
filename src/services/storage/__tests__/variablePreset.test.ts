@@ -478,7 +478,7 @@ describe("variablePreset", () => {
   })
 
   describe("importVariablePresets", () => {
-    it("should import presets in merge mode", async () => {
+    it("should import presets (merge with existing)", async () => {
       const existing = {
         "preset-1": {
           ...mockPreset,
@@ -493,38 +493,13 @@ describe("variablePreset", () => {
         'preset-2,Role,dictionary,User roles,,,"[{""id"":""item-1"",""name"":""Customer"",""content"":""You are a customer...""},{""id"":""item-2"",""name"":""Manager"",""content"":""You are a manager...""}]",2024-01-01T00:00:00.000Z,2024-01-01T00:00:00.000Z',
       ].join("\n")
 
-      const count = await importVariablePresets(csvData, "merge")
+      const count = await importVariablePresets(csvData)
 
       expect(count).toBe(1)
       expect(variablePresetsStorage.setValue).toHaveBeenCalledWith(
         expect.objectContaining({
           "preset-1": existing["preset-1"],
           "preset-2": expect.any(Object),
-        }),
-      )
-    })
-
-    it("should import presets in replace mode", async () => {
-      const existing = {
-        "preset-1": {
-          ...mockPreset,
-          createdAt: mockPreset.createdAt.toISOString(),
-          updatedAt: mockPreset.updatedAt.toISOString(),
-        },
-      }
-      vi.mocked(variablePresetsStorage.getValue).mockResolvedValue(existing)
-
-      const csvData = [
-        "id,name,type,description,textContent,selectOptions,dictionaryItems,createdAt,updatedAt",
-        'preset-2,Role,dictionary,User roles,,,"[{""id"":""item-1"",""name"":""Customer"",""content"":""You are a customer...""},{""id"":""item-2"",""name"":""Manager"",""content"":""You are a manager...""}]",2024-01-01T00:00:00.000Z,2024-01-01T00:00:00.000Z',
-      ].join("\n")
-
-      const count = await importVariablePresets(csvData, "replace")
-
-      expect(count).toBe(1)
-      expect(variablePresetsStorage.setValue).toHaveBeenCalledWith(
-        expect.not.objectContaining({
-          "preset-1": expect.any(Object),
         }),
       )
     })
@@ -537,7 +512,7 @@ describe("variablePreset", () => {
         'preset-select,Select Preset,select,,,"Option 1,Option 2,Option 3",,2024-01-01T00:00:00.000Z,2024-01-01T00:00:00.000Z',
       ].join("\n")
 
-      const count = await importVariablePresets(csvData, "merge")
+      const count = await importVariablePresets(csvData)
 
       expect(count).toBe(1)
       const savedData = vi.mocked(variablePresetsStorage.setValue).mock
@@ -557,7 +532,7 @@ describe("variablePreset", () => {
         'preset-dict,Dict Preset,dictionary,,,,"[{""id"":""item-1"",""name"":""Test"",""content"":""Content""}]",2024-01-01T00:00:00.000Z,2024-01-01T00:00:00.000Z',
       ].join("\n")
 
-      const count = await importVariablePresets(csvData, "merge")
+      const count = await importVariablePresets(csvData)
 
       expect(count).toBe(1)
       const savedData = vi.mocked(variablePresetsStorage.setValue).mock
@@ -576,7 +551,7 @@ describe("variablePreset", () => {
         "id,name,type,description,textContent,selectOptions,dictionaryItems,createdAt,updatedAt\n" +
         `preset-special,"Name with ""quotes"" and, comma",text,"${descriptionWithNewline}",Text content,,,2024-01-01T00:00:00.000Z,2024-01-01T00:00:00.000Z`
 
-      const count = await importVariablePresets(csvData, "merge")
+      const count = await importVariablePresets(csvData)
 
       expect(count).toBe(1)
       const savedData = vi.mocked(variablePresetsStorage.setValue).mock
@@ -589,7 +564,7 @@ describe("variablePreset", () => {
 
     it("should throw error for invalid CSV format", async () => {
       await expect(
-        importVariablePresets("invalid csv", "merge"),
+        importVariablePresets("invalid csv"),
       ).rejects.toThrow("Invalid CSV format")
     })
 
@@ -599,7 +574,7 @@ describe("variablePreset", () => {
         "preset-bad,Bad Preset,dictionary,,,,invalid json,2024-01-01T00:00:00.000Z,2024-01-01T00:00:00.000Z",
       ].join("\n")
 
-      await expect(importVariablePresets(csvData, "merge")).rejects.toThrow(
+      await expect(importVariablePresets(csvData)).rejects.toThrow(
         "Invalid JSON format for dictionaryItems",
       )
     })

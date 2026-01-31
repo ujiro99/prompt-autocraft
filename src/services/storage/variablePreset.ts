@@ -320,11 +320,11 @@ export async function exportVariablePresets(
 
 /**
  * Import variable presets from CSV using papaparse
+ * Merges imported presets with existing ones (overwrites if same ID)
  * @returns Number of imported presets
  */
 export async function importVariablePresets(
   csvData: string,
-  mode: "merge" | "replace",
 ): Promise<number> {
   // Parse CSV using Papa Parse
   const parseResult = Papa.parse<VariablePresetCSVRow>(csvData, {
@@ -406,9 +406,7 @@ export async function importVariablePresets(
     throw new Error(`Failed to parse CSV: ${errors.join("; ")}`)
   }
 
-  const currentPresets =
-    mode === "merge" ? await variablePresetsStorage.getValue() : {}
-
+  const currentPresets = await variablePresetsStorage.getValue()
   const updatedPresets = { ...currentPresets }
 
   for (const preset of presetsToImport) {

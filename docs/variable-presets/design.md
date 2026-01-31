@@ -253,11 +253,11 @@ export async function exportVariablePresets(
 
 /**
  * 変数プリセットをインポート
+ * 既存の変数プリセットとマージされます（同じIDがある場合は上書き）
  * @returns インポートされたプリセット数
  */
 export async function importVariablePresets(
   jsonData: string,
-  mode: "merge" | "replace",
 ): Promise<number>
 ```
 
