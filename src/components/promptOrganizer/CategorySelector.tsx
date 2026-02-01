@@ -1,6 +1,7 @@
 /**
  * Category Selector Component
  * Dropdown for selecting prompt categories
+ * Can be used in simple mode (read-only) or with edit mode (add/rename/delete categories)
  */
 
 import { useEffect, useState } from "react"
@@ -15,17 +16,21 @@ import {
 import type { Category } from "@/types/promptOrganizer"
 import { useContainer } from "@/hooks/useContainer.ts"
 import { categoryService } from "@/services/promptOrganizer/CategoryService"
+import { CategoryEditor } from "./CategoryEditor"
 
 interface CategorySelectorProps {
   value: string
   onValueChange: (categoryId: string) => void
   className?: string
+  /** Enable category editing features (add, rename, delete) */
+  editable?: boolean
 }
 
 export const CategorySelector = ({
   value,
   onValueChange,
   className,
+  editable = false,
 }: CategorySelectorProps) => {
   const [categories, setCategories] = useState<Category[]>([])
   const { container } = useContainer()
@@ -48,6 +53,19 @@ export const CategorySelector = ({
   const defaultCategories = categories.filter((c) => c.isDefault)
   const customCategories = categories.filter((c) => !c.isDefault)
 
+  // If editable mode is enabled, use CategoryEditor
+  if (editable) {
+    return (
+      <CategoryEditor
+        value={value}
+        onValueChange={onValueChange}
+        className={className}
+        container={container}
+      />
+    )
+  }
+
+  // Simple read-only mode
   return (
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger className={className}>

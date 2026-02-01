@@ -294,6 +294,7 @@ export const OrganizerPreviewDialog: React.FC<OrganizerPreviewDialogProps> = ({
                         onValueChange={(categoryId) =>
                           updateTemplate({ categoryId })
                         }
+                        editable={true}
                       />
                     </div>
 
