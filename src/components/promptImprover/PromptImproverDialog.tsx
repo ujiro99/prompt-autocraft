@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react"
 import { cn } from "@/lib/utils"
 import { Settings } from "lucide-react"
 import type { VariableConfig } from "@/types/prompt"
-import { VariableExpansionInfoDialog } from "./VariableExpansionInfoDialog"
+import { VariableExpansionInfoDialog } from "@/components/inputMenu/controller/VariableExpansionInfoDialog"
 import { PromptImproverSettingsDialog } from "@/components/settings/PromptImproverSettingsDialog"
 import { ModelSettingsDialog } from "@/components/settings/ModelSettingsDialog"
 import { ApiKeyWarningBanner } from "@/components/shared/ApiKeyWarningBanner"
@@ -28,6 +28,7 @@ import { mergeVariableConfigs } from "@/utils/variables/variableParser"
 import { improvePromptSettingsStorage } from "@/services/storage/definitions"
 import { PromptInputSection } from "./PromptInputSection"
 import { ImprovedPromptPreview } from "./ImprovedPromptPreview"
+import { i18n } from "#imports"
 
 /**
  * Props for prompt edit dialog

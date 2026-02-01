@@ -36,7 +36,9 @@
       "mcp__serena__replace_symbol_body",
       "WebFetch(domain:wxt.dev)",
       "WebFetch(domain:vitest.dev)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "mcp__serena__check_onboarding_performed",
+      "Bash(tree:*)"
     ],
     "deny": [],
     "ask": []

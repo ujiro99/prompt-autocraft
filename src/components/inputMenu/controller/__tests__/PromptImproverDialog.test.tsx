@@ -47,7 +47,7 @@ vi.mock("@/services/genai/PromptImprover", () => ({
 
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { PromptImproverDialog } from "../PromptImproverDialog"
+import { PromptImproverDialog } from "@/components/promptImprover/PromptImproverDialog"
 
 describe("PromptImproveDialog", () => {
   const mockOnInput = vi.fn()
