@@ -16,12 +16,6 @@ export const schema = {
             type: "string",
             description: "The reusable prompt template.",
           },
-          useCase: {
-            type: "string",
-            maxLength: 80,
-            description:
-              "A concise statement describing the situation and purpose of this prompt.",
-          },
           categoryId: {
             type: "string",
             description: "The ID of this prompt's category",
@@ -83,7 +77,6 @@ export const schema = {
         required: [
           "title",
           "content",
-          "useCase",
           "categoryId",
           "sourcePromptIds",
           "variables",

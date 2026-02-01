@@ -124,15 +124,14 @@ The message should include:
 A JSON object containing the following fields will be provided as input:
 - title: The name of the prompt (e.g., "Apology email to a client”)
 - content: The prompt text with variables (e.g., {client_name}, {project_name})
-- useCase: A one-sentence statement describing "situation + purpose” (e.g., "When sending an apology email to a client”)
 - clusterExplanation: A brief explanation of how the AI performed the automatic organization
 - category: The category (e.g., "external communication”)
 - sourcePromptCount: The number of original prompts from which this one was generated
 - variables: An array of extracted variables (e.g., [{ name: "client_name" }, { name: "due_date" }])
 
 # Example messages (for tone only — do not reuse):
-- "We consolidated the prompts you used for past {useCase} tasks into one. Just fill in the required fields to recreate the same quality output instantly.”
-- "We organized the patterns you repeatedly used for {useCase} and turned them into a ready-to-use, versatile prompt.”
+- "We consolidated the prompts you used for past  tasks into one. Just fill in the required fields to recreate the same quality output instantly.”
+- "We organized the patterns you repeatedly used for  and turned them into a ready-to-use, versatile prompt.”
 
 # Input JSON:
 `

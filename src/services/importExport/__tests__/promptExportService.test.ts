@@ -90,7 +90,6 @@ describe("PromptExportService", () => {
     isAIGenerated: undefined,
     aiMetadata: undefined,
     categoryId: undefined,
-    useCase: undefined,
     ...overrides,
   })
 
@@ -99,7 +98,7 @@ describe("PromptExportService", () => {
       const result = (service as any).convertToCSV([])
 
       expect(result).toContain(
-        `"name","content","executionCount","lastExecutedAt","isPinned","lastExecutionUrl","createdAt","updatedAt","variables","isAIGenerated","aiMetadata","categoryId","useCase"`,
+        `"name","content","executionCount","lastExecutedAt","isPinned","lastExecutionUrl","createdAt","updatedAt","variables","isAIGenerated","aiMetadata","categoryId"`,
       )
       expect(result.split("\n")).toHaveLength(2) // Header + empty line
     })
@@ -367,7 +366,6 @@ describe("PromptExportService", () => {
           showInPinned: true,
         },
         categoryId: "cat-123",
-        useCase: "Code review automation",
       })
       const result = (service as any).convertToCSV([prompt])
 
@@ -378,13 +376,11 @@ describe("PromptExportService", () => {
         isAIGenerated: string
         aiMetadata: string
         categoryId: string
-        useCase: string
       }>(result, { header: true })
       const row = parsed.data[0]
 
       expect(row.isAIGenerated).toBe("true")
       expect(row.categoryId).toBe("cat-123")
-      expect(row.useCase).toBe("Code review automation")
 
       const aiMetadata = JSON.parse(row.aiMetadata)
       expect(aiMetadata.sourcePromptIds).toEqual(["id1", "id2", "id3"])
@@ -455,19 +451,19 @@ describe("PromptExportService", () => {
       expect(aiMetadata.sourceCount).toBe(0)
     })
 
-    it("should handle special characters in useCase", () => {
+    it("should handle special characters in categoryId", () => {
       const prompt = createMockPrompt({
-        useCase: 'Testing with "quotes", newlines\nand, commas',
+        categoryId: "special-cat",
       })
       const result = (service as any).convertToCSV([prompt])
 
       // Parse CSV to verify proper escaping
       const parsed = Papa.parse<{
-        useCase: string
+        categoryId: string
       }>(result, { header: true })
       const row = parsed.data[0]
 
-      expect(row.useCase).toBe('Testing with "quotes", newlines\nand, commas')
+      expect(row.categoryId).toBe("special-cat")
     })
 
     it("should export prompt with only categoryId set", () => {
@@ -475,7 +471,6 @@ describe("PromptExportService", () => {
         categoryId: "tech-category",
         isAIGenerated: false,
         aiMetadata: undefined,
-        useCase: undefined,
       })
       const result = (service as any).convertToCSV([prompt])
 
@@ -486,14 +481,12 @@ describe("PromptExportService", () => {
         categoryId: string
         isAIGenerated: string
         aiMetadata: string
-        useCase: string
       }>(result, { header: true })
       const row = parsed.data[0]
 
       expect(row.categoryId).toBe("tech-category")
       expect(row.isAIGenerated).toBe("false")
       expect(row.aiMetadata).toBe("")
-      expect(row.useCase).toBe("")
     })
   })
 })

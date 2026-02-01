@@ -86,7 +86,6 @@ class TemplateConverter {
       id: crypto.randomUUID(),
       title: generated.title,
       content: generated.content,
-      useCase: generated.useCase,
       categoryId: generated.categoryId,
       clusterExplanation: generated.clusterExplanation,
       variables: generated.variables,
@@ -139,7 +138,6 @@ class TemplateConverter {
         ...candidate.aiMetadata,
         confirmed: true, // Mark as confirmed when saving
       },
-      useCase: candidate.useCase,
       categoryId: candidate.categoryId,
       excludeFromOrganizer: true, // Exclude generated prompts from future organization
     }

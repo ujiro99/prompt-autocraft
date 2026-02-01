@@ -45,12 +45,8 @@ interface EditDialogProps {
   initialVariables?: VariableConfig[]
   /** Initial category ID (when editing) */
   initialCategoryId?: string | null
-  /** Initial use case (when editing) */
-  initialUseCase?: string
   /** Initial exclude from organizer flag (when editing) */
   initialExcludeFromOrganizer?: boolean
-  /** Whether the prompt is AI-generated */
-  isAIGenerated?: boolean
   /** Dialog display mode */
   displayMode: SaveMode
   /** Callback on save */
@@ -86,9 +82,7 @@ export const EditDialog: React.FC<EditDialogProps> = ({
   initialContent,
   initialVariables,
   initialCategoryId,
-  initialUseCase = "",
   initialExcludeFromOrganizer = false,
-  isAIGenerated,
   displayMode,
   onSave,
 }) => {
@@ -100,7 +94,6 @@ export const EditDialog: React.FC<EditDialogProps> = ({
   const [categoryId, setCategoryId] = useState<string | null>(
     initialCategoryId ?? null,
   )
-  const [useCase, setUseCase] = useState(initialUseCase)
   const [excludeFromOrganizer, setExcludeFromOrganizer] = useState(
     initialExcludeFromOrganizer,
   )
@@ -127,14 +120,12 @@ export const EditDialog: React.FC<EditDialogProps> = ({
         : [],
     )
     setCategoryId(initialCategoryId ?? null)
-    setUseCase(initialUseCase)
     setExcludeFromOrganizer(initialExcludeFromOrganizer)
   }, [
     initialName,
     initialContent,
     initialVariables,
     initialCategoryId,
-    initialUseCase,
     initialExcludeFromOrganizer,
     variableExpansionEnabled,
   ])
@@ -146,7 +137,6 @@ export const EditDialog: React.FC<EditDialogProps> = ({
       setContent(initialContent)
       setVariables(initialVariables || [])
       setCategoryId(initialCategoryId ?? null)
-      setUseCase(initialUseCase)
       setExcludeFromOrganizer(initialExcludeFromOrganizer)
     }
   }, [
@@ -155,7 +145,6 @@ export const EditDialog: React.FC<EditDialogProps> = ({
     initialContent,
     initialVariables,
     initialCategoryId,
-    initialUseCase,
     initialExcludeFromOrganizer,
   ])
 
@@ -197,9 +186,6 @@ export const EditDialog: React.FC<EditDialogProps> = ({
       }
       if (categoryId !== initialCategoryId) {
         updates.categoryId = categoryId || null
-      }
-      if (useCase.trim() !== initialUseCase) {
-        updates.useCase = useCase.trim() || undefined
       }
       if (excludeFromOrganizer !== initialExcludeFromOrganizer) {
         updates.excludeFromOrganizer = excludeFromOrganizer
@@ -283,32 +269,6 @@ export const EditDialog: React.FC<EditDialogProps> = ({
                   className="flex-1"
                 />
               </div>
-
-              {/* Use case input */}
-              {isAIGenerated && (
-                <div className="flex flex-row items-center gap-1">
-                  <div className="w-48">
-                    <label
-                      htmlFor="prompt-usecase"
-                      className="text-sm font-semibold text-foreground inline-block"
-                    >
-                      {i18n.t("promptOrganizer.preview.useCase")}
-                    </label>
-                    <p className="text-xs text-muted-foreground">
-                      {i18n.t("dialogs.edit.useCaseDescription")}
-                    </p>
-                  </div>
-                  <Input
-                    id="prompt-usecase"
-                    type="text"
-                    value={useCase}
-                    onChange={(e) => setUseCase(e.target.value)}
-                    placeholder={i18n.t("dialogs.edit.useCasePlaceholder")}
-                    disabled={isLoading}
-                    className="flex-1"
-                  />
-                </div>
-              )}
 
               <div className="flex flex-row items-center gap-1">
                 {/* Category selector */}

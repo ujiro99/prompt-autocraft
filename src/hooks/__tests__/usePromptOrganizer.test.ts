@@ -110,7 +110,6 @@ describe("usePromptOrganizer", () => {
       id: `t${i + 1}`,
       title: `Template ${i + 1}`,
       content: `Content ${i + 1}`,
-      useCase: `Use case ${i + 1}`,
       clusterExplanation: `Explanation ${i + 1}`,
       categoryId: "cat1",
       variables: [],
@@ -434,7 +433,6 @@ describe("usePromptOrganizer", () => {
       const generatedTemplate: GeneratedTemplate = {
         title: "Template 1",
         content: "Content 1",
-        useCase: "Use case 1",
         clusterExplanation: "Explanation 1",
         categoryId: "cat1",
         sourcePromptIds: ["p1"],

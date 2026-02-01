@@ -12,7 +12,6 @@ const mockTemplates: TemplateCandidate[] = [
     id: "1",
     title: "Code Review Template",
     content: "Review the following code:\n{{code}}",
-    useCase: "For reviewing code snippets",
     clusterExplanation:
       "This template helps review code by providing structured feedback on code quality, best practices, and potential improvements.",
     categoryId: "documentCreation",
@@ -36,7 +35,6 @@ const mockTemplates: TemplateCandidate[] = [
     title: "Bug Report Template",
     content:
       "Report a bug:\n**Description:** {{description}}\n**Steps to reproduce:** {{steps}}\n**Expected result:** {{expected}}\n**Actual result:** {{actual}}",
-    useCase: "For reporting bugs in detail",
     clusterExplanation:
       "A comprehensive bug report template that ensures all necessary information is captured for effective debugging.",
     categoryId: "dev",
@@ -75,7 +73,6 @@ const mockTemplates: TemplateCandidate[] = [
     title: "Meeting Summary",
     content:
       "Summarize the following meeting:\n**Date:** {{date}}\n**Attendees:** {{attendees}}\n**Topics:** {{topics}}\n**Action Items:** {{actions}}",
-    useCase: "For creating meeting summaries",
     clusterExplanation:
       "Captures key points from meetings including attendees, topics discussed, and action items for follow-up.",
     categoryId: "general",
@@ -142,7 +139,6 @@ const mockResultJa: PromptOrganizerResult = {
       id: "1",
       title: "文章の翻訳",
       content: "以下の文章を翻訳してください。:\n{{code}}",
-      useCase: "文章を他の言語に翻訳する",
       clusterExplanation:
         "このテンプレートは、指定された文章を別の言語に翻訳するために使用されます。ユーザーが入力した文章を迅速かつ正確に翻訳することができます。",
       categoryId: "documentCreation",

@@ -167,7 +167,6 @@ describe("OrganizerResultDialog", () => {
         id: `t${i + 1}`,
         title: `Template ${i + 1}`,
         content: `Content ${i + 1}`,
-        useCase: `Use case ${i + 1}`,
         clusterExplanation: `Explanation ${i + 1}`,
         categoryId: "cat1",
         variables: [],
@@ -245,7 +244,6 @@ describe("OrganizerResultDialog", () => {
       )
 
       expect(screen.getByText("Template 1")).toBeInTheDocument()
-      expect(screen.getByText("Use case 1")).toBeInTheDocument()
     })
 
     it("should display example prompts section", () => {
@@ -416,7 +414,6 @@ describe("OrganizerResultDialog", () => {
             id: "t1",
             title: "Template 1",
             content: "Content 1",
-            useCase: "Use case 1",
             clusterExplanation: "Explanation 1",
             categoryId: "cat1",
             variables: [],
@@ -465,7 +462,6 @@ describe("OrganizerResultDialog", () => {
             id: "t1",
             title: "Template 1",
             content: "Content 1",
-            useCase: "Use case 1",
             clusterExplanation: "Explanation 1",
             categoryId: "cat1",
             variables: [],
@@ -509,7 +505,6 @@ describe("OrganizerResultDialog", () => {
           id: `t${i + 1}`,
           title: `Template ${i + 1}`,
           content: `Content ${i + 1}`,
-          useCase: `Use case ${i + 1}`,
           clusterExplanation: `Explanation ${i + 1}`,
           categoryId: "cat1",
           variables: [],
