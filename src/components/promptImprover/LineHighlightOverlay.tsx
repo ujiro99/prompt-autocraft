@@ -68,9 +68,7 @@ export const LineHighlightOverlay: React.FC<LineHighlightOverlayProps> = ({
             key={`bar-${index}`}
             className={cn(
               "absolute w-1 rounded-full transition-all duration-200",
-              hoveredIndex === index
-                ? "bg-primary z-10"
-                : "bg-primary/40 z-0",
+              hoveredIndex === index ? "bg-primary z-10" : "bg-primary/40 z-0",
             )}
             style={{
               top: `${top}px`,

@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils"
 import type { ImproveLog } from "@/services/promptImprover/improverService"
+import { i18n } from "#imports"
 
 interface ImprovementExplanationCardProps {
   improvement: ImproveLog
@@ -17,9 +18,9 @@ export const ImprovementExplanationCard: React.FC<
     improvement.start_line === improvement.end_line
       ? i18n.t("dialogs.promptImprove.singleLine", [improvement.start_line])
       : i18n.t("dialogs.promptImprove.lineRange", [
-        improvement.start_line,
-        improvement.end_line,
-      ])
+          improvement.start_line,
+          improvement.end_line,
+        ])
 
   return (
     <div

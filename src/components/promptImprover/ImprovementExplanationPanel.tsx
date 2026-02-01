@@ -1,6 +1,7 @@
 import type { ImproveLog } from "@/services/promptImprover/improverService"
 import { ImprovementExplanationCard } from "./ImprovementExplanationCard"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { i18n } from "#imports"
 
 interface ImprovementExplanationPanelProps {
   improvements: ImproveLog[]

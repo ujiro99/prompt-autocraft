@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react"
 import { cn } from "@/lib/utils"
-import { Sparkles, Loader2, Settings } from "lucide-react"
+import { Settings } from "lucide-react"
 import type { VariableConfig } from "@/types/prompt"
 import { VariableExpansionInfoDialog } from "./VariableExpansionInfoDialog"
 import { PromptImproverSettingsDialog } from "@/components/settings/PromptImproverSettingsDialog"
@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { ButtonGroup } from "@/components/ui/button-group"
-import { Textarea } from "@/components/ui/textarea"
 import { useContainer } from "@/hooks/useContainer"
 import { useSettings } from "@/hooks/useSettings"
 import { useAiModel } from "@/hooks/useAiModel"
@@ -27,9 +26,8 @@ import { ImproverService } from "@/services/promptImprover/improverService"
 import { stopPropagation } from "@/utils/dom"
 import { mergeVariableConfigs } from "@/utils/variables/variableParser"
 import { improvePromptSettingsStorage } from "@/services/storage/definitions"
-import { ImprovementExplanationPanel } from "./ImprovementExplanationPanel"
-import { LineHighlightOverlay } from "./LineHighlightOverlay"
-import { ConnectingLines } from "./ConnectingLines"
+import { PromptInputSection } from "./PromptInputSection"
+import { ImprovedPromptPreview } from "./ImprovedPromptPreview"
 
 /**
  * Props for prompt edit dialog
@@ -75,8 +73,6 @@ export const PromptImproverDialog: React.FC<PromptImproveDialogProps> = ({
   const [modelSettingsDialogOpen, setModelSettingsDialogOpen] = useState(false)
   const [changeLog, setChangeLog] = useState<ImproveLog[]>([])
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([])
 
   // Check if variable expansion is enabled (default: true)
   const variableExpansionEnabled = settings?.variableExpansionEnabled ?? true
@@ -196,27 +192,6 @@ export const PromptImproverDialog: React.FC<PromptImproveDialogProps> = ({
   }
 
   /**
-   * Scroll to specific line in the textarea
-   */
-  const handleScrollToLine = (startLine: number, _endLine: number) => {
-    if (!textareaRef.current) return
-
-    // Calculate line height
-    const computedStyle = getComputedStyle(textareaRef.current)
-    const lineHeight = parseFloat(computedStyle.lineHeight) || 20
-
-    // Calculate target position (center the range in viewport)
-    const targetScrollTop =
-      (startLine - 1) * lineHeight - textareaRef.current.clientHeight / 2
-
-    // Smooth scroll
-    textareaRef.current.scrollTo({
-      top: Math.max(0, targetScrollTop),
-      behavior: "smooth",
-    })
-  }
-
-  /**
    * Open model settings dialog
    */
   const handleOpenModelSettings = () => {
@@ -303,138 +278,31 @@ export const PromptImproverDialog: React.FC<PromptImproveDialogProps> = ({
 
           <div className="space-y-4">
             {/* Prompt content input */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="prompt-content"
-                  className="text-sm font-semibold text-foreground"
-                >
-                  {i18n.t("dialogs.promptImprove.promptTitle")}
-                </label>
-              </div>
-              <Textarea
-                id="prompt-content"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder={i18n.t("placeholders.enterPromptContent")}
-                disabled={isLoading || isImproving}
-                className="max-h-60"
-                rows={6}
-              />
+            <PromptInputSection
+              content={content}
+              onChange={setContent}
+              label={i18n.t("dialogs.promptImprove.promptTitle")}
+              placeholder={i18n.t("placeholders.enterPromptContent")}
+              disabled={isLoading || isImproving}
+            />
 
-              {/* Preview area for improved prompt */}
-              <div className="mt-4 space-y-2">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-semibold text-foreground">
-                    {i18n.t("dialogs.promptImprove.previewTitle")}
-                  </label>
-                </div>
-
-                {improvementError ? (
-                  <div className="text-sm text-destructive p-3 bg-destructive/10 rounded-md border border-destructive/20">
-                    {improvementError}
-                  </div>
-                ) : (
-                  <div
-                    className={cn(
-                      "space-y-2",
-                      changeLog.length > 0 &&
-                        "grid grid-cols-[1fr_60px_400px] gap-4",
-                    )}
-                  >
-                    {/* Left: Improved prompt with overlay */}
-                    <div className="relative">
-                      <Textarea
-                        ref={textareaRef}
-                        value={improvedContent}
-                        readOnly
-                        className="max-h-60 bg-muted/50 font-mono"
-                        rows={6}
-                        placeholder={
-                          isImproving
-                            ? i18n.t("dialogs.promptImprove.improving")
-                            : ""
-                        }
-                      />
-                      {changeLog.length > 0 && (
-                        <LineHighlightOverlay
-                          improvements={changeLog}
-                          hoveredIndex={hoveredIndex}
-                          textareaRef={textareaRef}
-                        />
-                      )}
-                      {improvedContent.trim() === "" && !isImproving && (
-                        <div className="absolute inset-0 flex items-center justify-center gap-1 bg-background/50">
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={handleImprove}
-                            className={cn(
-                              "flex items-center",
-                              "bg-gradient-to-r from-purple-50 to-blue-50",
-                              "border-purple-200 hover:border-purple-300",
-                              "hover:from-purple-100 hover:to-blue-100",
-                              "text-purple-700 hover:text-purple-800",
-                              "transition-all duration-200",
-                            )}
-                            disabled={
-                              isImproving ||
-                              isLoading ||
-                              !content.trim() ||
-                              !isApiKeyConfigured
-                            }
-                          >
-                            <Sparkles
-                              className="mr-0.5 size-4"
-                              fill="url(#lucideGradient)"
-                            />
-                            {i18n.t("dialogs.promptImprove.improveButton")}
-                          </Button>
-                        </div>
-                      )}
-                      {isImproving && (
-                        <div className="absolute inset-0 flex items-center justify-center gap-1 bg-background/50">
-                          <Loader2 className="ml-5 size-6 animate-spin text-primary" />
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={handleCancelImprovement}
-                            className="text-xs"
-                          >
-                            {i18n.t("common.cancel")}
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Middle: Connecting lines */}
-                    {changeLog.length > 0 && (
-                      <div className="relative">
-                        <ConnectingLines
-                          improvements={changeLog}
-                          textareaRef={textareaRef}
-                          cardRefs={cardRefs}
-                          hoveredIndex={hoveredIndex}
-                          promptContent={improvedContent}
-                        />
-                      </div>
-                    )}
-
-                    {/* Right: Explanation cards */}
-                    {changeLog.length > 0 && (
-                      <ImprovementExplanationPanel
-                        improvements={changeLog}
-                        hoveredIndex={hoveredIndex}
-                        onHoverChange={setHoveredIndex}
-                        onImprovementClick={handleScrollToLine}
-                        cardRefs={cardRefs}
-                      />
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
+            {/* Preview area for improved prompt */}
+            <ImprovedPromptPreview
+              label={i18n.t("dialogs.promptImprove.previewTitle")}
+              improvedContent={improvedContent}
+              isImproving={isImproving}
+              improvementError={improvementError}
+              changeLog={changeLog}
+              hoveredIndex={hoveredIndex}
+              onHoverChange={setHoveredIndex}
+              onImprove={handleImprove}
+              onCancelImprovement={handleCancelImprovement}
+              disabled={isLoading || !content.trim()}
+              isApiKeyConfigured={isApiKeyConfigured}
+              improveButtonText={i18n.t("dialogs.promptImprove.improveButton")}
+              cancelButtonText={i18n.t("common.cancel")}
+              improvingPlaceholder={i18n.t("dialogs.promptImprove.improving")}
+            />
           </div>
 
           <DialogFooter className="mt-3">

@@ -37,8 +37,7 @@ export const ConnectingLines: React.FC<ConnectingLinesProps> = ({
         // Calculate bar position (on the left side of connecting area)
         const barTop =
           (improvement.start_line - 1) * lineHeight +
-          ((improvement.end_line - improvement.start_line + 1) * lineHeight) /
-            2
+          ((improvement.end_line - improvement.start_line + 1) * lineHeight) / 2
         const barLeft = 0
 
         // Calculate card position (on the right side of connecting area)
@@ -87,7 +86,10 @@ export const ConnectingLines: React.FC<ConnectingLinesProps> = ({
   }, [improvements, textareaRef, cardRefs, hoveredIndex])
 
   return (
-    <svg className="absolute inset-0 w-full h-full">
+    <svg
+      data-testid="connecting-lines"
+      className="absolute inset-0 w-full h-full stroke-border hover:stroke-primary"
+    >
       {lines.map((line, index) => (
         <line
           key={index}
@@ -95,7 +97,6 @@ export const ConnectingLines: React.FC<ConnectingLinesProps> = ({
           y1={line.start.y}
           x2={line.end.x}
           y2={line.end.y}
-          stroke={line.isHovered ? "hsl(var(--primary))" : "hsl(var(--border))"}
           strokeWidth={line.isHovered ? 2 : 1}
           strokeDasharray={line.isHovered ? "0" : "4 2"}
           className="transition-all duration-200"
