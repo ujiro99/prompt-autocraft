@@ -1,16 +1,18 @@
 import { vi } from "vitest"
 import "@testing-library/jest-dom"
 
-// Mock Browser.i18n.getMessage to support @wxt-dev/i18n
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const globalAny = globalThis as any
-if (!globalAny.Browser) {
-  globalAny.Browser = {}
-}
-if (!globalAny.Browser.i18n) {
-  globalAny.Browser.i18n = {}
-}
-globalAny.Browser.i18n.getMessage = vi.fn((key: string) => key)
+// ============================================
+// Browser API Mocks
+// ============================================
+
+// Mock project-specific browser utilities
+vi.mock("@/utils/browser", () => ({
+  getUILanguage: vi.fn(() => "en"),
+}))
+
+// ============================================
+// WXT Framework Mocks
+// ============================================
 
 // Mock @wxt-dev/analytics to prevent Browser.runtime.connect errors
 vi.mock("@wxt-dev/analytics", () => ({
@@ -19,6 +21,7 @@ vi.mock("@wxt-dev/analytics", () => ({
   }),
 }))
 
+// Mock @wxt-dev/i18n
 vi.mock("@wxt-dev/i18n", () => {
   return {
     createI18n: () => ({
@@ -29,6 +32,16 @@ vi.mock("@wxt-dev/i18n", () => {
     },
   }
 })
+
+// Mock #imports (WXT auto-imports)
+vi.mock("#imports", () => ({
+  analytics: {
+    track: vi.fn().mockResolvedValue(undefined),
+  },
+  i18n: {
+    t: (key: string, _countOrSubs?: unknown, _subs?: unknown) => key,
+  },
+}))
 
 // JSDom + Vitest don't play well with each other. Long story short - default
 // TextEncoder produces Uint8Array objects that are _different_ from the global

@@ -5,18 +5,22 @@
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { ImproverService } from "../improverService"
 
+// ============================================
+// Service-specific Mocks
+// ============================================
+
 // Create mocks for GeminiClient
 const mockInitialize = vi.fn()
 const mockIsInitialized = vi.fn()
-const mockGenerateContentStream = vi.fn()
+const mockGenerateStructuredContentStream = vi.fn()
 
 // Mock GeminiClient module
-vi.mock("../GeminiClient", () => ({
+vi.mock("../../genai/GeminiClient", () => ({
   GeminiClient: {
     getInstance: () => ({
       initialize: mockInitialize,
       isInitialized: mockIsInitialized,
-      generateContentStream: mockGenerateContentStream,
+      generateStructuredContentStream: mockGenerateStructuredContentStream,
     }),
   },
 }))
@@ -27,7 +31,7 @@ describe("PromptImprover", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mockIsInitialized.mockReturnValue(true)
-    improver = new ImproverService()
+    improver = new ImproverService("en")
   })
 
   describe("improvePrompt", () => {
@@ -50,12 +54,21 @@ describe("PromptImprover", () => {
       const onStream = vi.fn()
       const onComplete = vi.fn()
 
-      const mockStream = async function* () {
-        yield { text: "chunk1" }
-        yield { text: "chunk2" }
-        yield { text: "chunk3" }
-      }
-      mockGenerateContentStream.mockReturnValue(mockStream())
+      // Mock structured response that calls onProgress with chunks
+      mockGenerateStructuredContentStream.mockImplementation(
+        async (_userContent, _schema, _config, options) => {
+          // Simulate streaming via onProgress callback
+          options?.onProgress?.("chunk1")
+          options?.onProgress?.("chunk2")
+          options?.onProgress?.("chunk3")
+
+          // Return final structured response
+          return {
+            improvedPrompt: "improved prompt",
+            changeLog: [],
+          }
+        },
+      )
 
       await improver.improvePrompt({
         prompt: "test prompt",
@@ -72,25 +85,36 @@ describe("PromptImprover", () => {
     it("should call onComplete with full improved prompt", async () => {
       const onComplete = vi.fn()
 
-      const mockStream = async function* () {
-        yield { text: "improved " }
-        yield { text: "prompt " }
-        yield { text: "text" }
-      }
-      mockGenerateContentStream.mockReturnValue(mockStream())
+      // Mock structured response
+      mockGenerateStructuredContentStream.mockImplementation(
+        async (_userContent, _schema, _config, options) => {
+          // Simulate streaming via onProgress callback
+          options?.onProgress?.("improved ")
+          options?.onProgress?.("prompt ")
+          options?.onProgress?.("text")
+
+          // Return final structured response
+          return {
+            improvedPrompt: "improved prompt text",
+            changeLog: [],
+          }
+        },
+      )
 
       await improver.improvePrompt({
         prompt: "test prompt",
         onComplete,
       })
 
-      expect(onComplete).toHaveBeenCalledWith("improved prompt text")
+      expect(onComplete).toHaveBeenCalledWith("improved prompt text", [])
     })
 
     it("should call onError when stream fails", async () => {
       const onError = vi.fn()
 
-      mockGenerateContentStream.mockRejectedValue(new Error("Stream error"))
+      mockGenerateStructuredContentStream.mockRejectedValue(
+        new Error("Stream error"),
+      )
 
       await improver.improvePrompt({
         prompt: "test prompt",
@@ -101,26 +125,38 @@ describe("PromptImprover", () => {
     })
 
     it("should pass system instruction to client", async () => {
-      const mockStream = async function* () {
-        yield { text: "improved" }
-      }
-      mockGenerateContentStream.mockReturnValue(mockStream())
+      // Mock structured response
+      mockGenerateStructuredContentStream.mockResolvedValue({
+        improvedPrompt: "improved",
+        changeLog: [],
+      })
 
       await improver.improvePrompt({
         prompt: "test prompt",
       })
 
       // Verify that user content includes improvement guidelines and user prompt
-      expect(mockGenerateContentStream).toHaveBeenCalledWith(
+      expect(mockGenerateStructuredContentStream).toHaveBeenCalledWith(
         expect.stringContaining("Analyze and improve"),
+        expect.objectContaining({
+          type: "object",
+          properties: expect.objectContaining({
+            improvedPrompt: expect.any(Object),
+            changeLog: expect.any(Object),
+          }),
+        }),
         expect.objectContaining({
           systemInstruction: expect.stringContaining(
             "expert prompt engineering assistant",
           ),
         }),
+        expect.objectContaining({
+          signal: expect.any(AbortSignal),
+          onProgress: expect.any(Function),
+        }),
       )
       // Verify user prompt is wrapped in tags
-      const userContent = mockGenerateContentStream.mock.calls[0][0]
+      const userContent = mockGenerateStructuredContentStream.mock.calls[0][0]
       expect(userContent).toContain("<user_prompt>")
       expect(userContent).toContain("test prompt")
       expect(userContent).toContain("</user_prompt>")

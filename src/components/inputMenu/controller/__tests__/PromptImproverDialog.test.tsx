@@ -5,14 +5,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import type { ImprovePromptData } from "@/types/prompt"
 
-// Mock .wxt/analytics FIRST to prevent Browser.runtime.connect errors
-vi.mock("#imports", () => ({
-  analytics: {
-    track: vi.fn().mockResolvedValue(undefined),
-  },
-}))
+// ============================================
+// Component-specific Mocks
+// ============================================
 
-// Mock hooks
+// Mock React hooks used by the component
 vi.mock("@/hooks/useContainer", () => ({
   useContainer: () => ({ container: document.body }),
 }))
@@ -29,20 +26,21 @@ vi.mock("@/hooks/useAiModel", () => ({
   }),
 }))
 
-// Mock PromptImprover class using vi.hoisted
-const { MockPromptImprover } = vi.hoisted(() => {
-  class MockPromptImprover {
-    initializeFromEnv = vi.fn()
+// Mock ImproverService class using vi.hoisted
+const { MockImproverService } = vi.hoisted(() => {
+  class MockImproverService {
+    constructor(_lang: string) {
+      // Accept lang parameter but do nothing with it in tests
+    }
     improvePrompt = vi.fn()
     cancel = vi.fn()
     loadSettings = vi.fn().mockResolvedValue(undefined)
-    isApiKeyConfigured = vi.fn().mockReturnValue(true)
   }
-  return { MockPromptImprover }
+  return { MockImproverService }
 })
 
-vi.mock("@/services/genai/PromptImprover", () => ({
-  PromptImprover: MockPromptImprover,
+vi.mock("@/services/promptImprover/improverService", () => ({
+  ImproverService: MockImproverService,
 }))
 
 import { render, screen, waitFor } from "@testing-library/react"

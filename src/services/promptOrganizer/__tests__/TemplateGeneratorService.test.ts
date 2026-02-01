@@ -69,7 +69,7 @@ vi.mock("@/services/storage/definitions", () => ({
   genaiApiKeyStorage: mockGenaiApiKeyStorage,
 }))
 
-vi.mock("@/services/genai/defaultPrompts", () => ({
+vi.mock("@/services/promptOrganizer/defaultPrompts", () => ({
   SYSTEM_ORGANIZATION_INSTRUCTION: mockSystemInstruction,
 }))
 
@@ -240,7 +240,7 @@ describe("TemplateGeneratorService", () => {
 
       const callArgs = mockGeminiClient.generateStructuredContentStream.mock
         .calls[0] as any[]
-      const [prompt, schema, config] = callArgs
+      const [prompt, schema, config, options] = callArgs
 
       expect(prompt).toContain("Test organization prompt")
       expect(schema).toHaveProperty("type", "object")
@@ -249,6 +249,10 @@ describe("TemplateGeneratorService", () => {
         "systemInstruction",
         "Test system instruction",
       )
+      // Verify the fourth parameter (options)
+      expect(options).toBeDefined()
+      expect(options.signal).toBeDefined()
+      expect(typeof options.onProgress).toBe("function")
     })
 
     it("should return prompts and usage", async () => {

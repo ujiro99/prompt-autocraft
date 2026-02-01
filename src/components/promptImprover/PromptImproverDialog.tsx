@@ -29,6 +29,7 @@ import { improvePromptSettingsStorage } from "@/services/storage/definitions"
 import { PromptInputSection } from "./PromptInputSection"
 import { ImprovedPromptPreview } from "./ImprovedPromptPreview"
 import { i18n } from "#imports"
+import { getUILanguage } from "@/utils/browser"
 
 /**
  * Props for prompt edit dialog
@@ -88,7 +89,7 @@ export const PromptImproverDialog: React.FC<PromptImproveDialogProps> = ({
   // Initialize PromptImprover
   useEffect(() => {
     if (!promptImproverRef.current) {
-      promptImproverRef.current = new ImproverService()
+      promptImproverRef.current = new ImproverService(getUILanguage())
       promptImproverRef.current.loadSettings()
 
       // Watch for settings changes

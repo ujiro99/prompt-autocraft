@@ -9,7 +9,7 @@ import { GeminiError, GeminiErrorType } from "../genai/types"
 import { improvePromptCacheService } from "../storage/improvePromptCache"
 import { improvePromptSettingsStorage } from "../storage/definitions"
 import {
-  SYSTEM_INSTRUCTION,
+  getSystemInstruction,
   DEFAULT_IMPROVEMENT_PROMPT,
 } from "./defaultPrompts"
 
@@ -37,11 +37,13 @@ export class ImproverService {
   private client: GeminiClient
   private abortController: AbortController | null = null
   private timeoutId: ReturnType<typeof setTimeout> | null = null
-  private systemInstruction: string = SYSTEM_INSTRUCTION // Fixed role definition
+  private systemInstruction: string // Fixed, not user-configurable
   private improvementPrompt: string = DEFAULT_IMPROVEMENT_PROMPT // User-configurable
 
-  constructor() {
+  constructor(lang: string) {
     this.client = GeminiClient.getInstance()
+    this.systemInstruction = getSystemInstruction(lang)
+
     // Load settings asynchronously
     this.loadSettings().catch((error) => {
       console.warn("Failed to load settings:", error)
