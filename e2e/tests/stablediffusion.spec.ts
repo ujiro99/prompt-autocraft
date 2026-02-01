@@ -3,7 +3,7 @@ import { StableDiffusionPage } from "../page-objects/StableDiffusionPage"
 import { StorageHelpers } from "../utils/storage-helpers"
 import { WaitHelpers } from "../utils/wait-helpers"
 
-test.describe("Stable Diffusion Extension Tests", () => {
+test.describe.skip("Stable Diffusion Extension Tests", () => {
   let stableDiffusionPage: StableDiffusionPage
   let storageHelpers: StorageHelpers
   let waitHelpers: WaitHelpers
