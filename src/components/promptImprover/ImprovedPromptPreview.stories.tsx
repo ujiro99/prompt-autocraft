@@ -39,6 +39,13 @@ const sampleChangeLogs: ImproveLog[] = [
     benefit:
       "Provides concrete reference points that improve accuracy and reduce ambiguity",
   },
+  {
+    start_line: 12,
+    end_line: 17,
+    description: "Added a code example",
+    benefit:
+      "Gives the AI a clear template to follow, enhancing the quality of the generated code",
+  },
 ]
 
 const sampleImprovedContent = `You are tasked with creating a factorial calculation function.
@@ -49,7 +56,31 @@ Write a JavaScript function that:
 - Uses recursion for the implementation
 
 Example:
-factorial(5) should return 120`
+- factorial(5) should return 120
+- factorial(0) should return 1
+\`\`\`
+Please ensure the function handles edge cases appropriately.
+function factorial(n) {
+  if (n === 0) {
+    return 1;
+  }
+  return n * factorial(n - 1);
+}
+\`\`\`
+
+Example 2:
+\`\`\`
+function factorial(n) {
+  if (n < 0) {
+    throw new Error("Input must be a non-negative integer.");
+  }
+  if (n === 0) {
+    return 1;
+  }
+  return n * factorial(n - 1);
+}
+\`\`\`
+`
 
 // Empty state (before improvement)
 export const Empty: Story = {
@@ -168,7 +199,7 @@ export const ImprovedWithLogs: Story = {
     isImproving: false,
     improvementError: null,
     changeLog: sampleChangeLogs,
-    hoveredIndex: null,
+    hoveredIndex: 1,
     onHoverChange: fn(),
     onImprove: fn(),
     onCancelImprovement: fn(),
@@ -180,7 +211,7 @@ export const ImprovedWithLogs: Story = {
   },
   decorators: [
     (Story) => (
-      <div className="w-[1200px]">
+      <div className="w-4xl">
         <Story />
       </div>
     ),

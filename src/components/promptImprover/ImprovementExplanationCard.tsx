@@ -17,26 +17,31 @@ export const ImprovementExplanationCard: React.FC<
   const lineRange =
     improvement.start_line === improvement.end_line
       ? i18n.t("dialogs.promptImprove.singleLine", [improvement.start_line])
-      : i18n.t("dialogs.promptImprove.lineRange", [
-          improvement.start_line,
-          improvement.end_line,
-        ])
+      : i18n.t(
+        "dialogs.promptImprove.lineRange",
+        improvement.start_line,
+        improvement.end_line,
+      )
 
   return (
     <div
       ref={cardRef}
       className={cn(
         "border rounded-lg p-4 bg-card cursor-pointer transition-all duration-200",
-        "hover:border-primary hover:shadow-lg hover:scale-[1.02]",
-        isHovered && "border-primary shadow-lg scale-[1.02]",
+        "hover:border-primary/60 hover:shadow-lg hover:scale-[1.02]",
+        isHovered && "border-primary/60 shadow-lg scale-[1.02]",
       )}
       onMouseEnter={() => onHover(index)}
       onMouseLeave={() => onHover(null)}
       onClick={onClick}
     >
       <div className="space-y-2">
-        <div className="text-sm font-semibold text-primary">{lineRange}</div>
-        <div className="text-sm text-foreground">{improvement.description}</div>
+        <div className="text-sm font-semibold text-foreground/80">
+          {improvement.description}
+          <span className="ml-2 text-xs font-normal text-muted-foreground">
+            {lineRange}
+          </span>
+        </div>
         <div className="text-xs text-muted-foreground">
           {improvement.benefit}
         </div>

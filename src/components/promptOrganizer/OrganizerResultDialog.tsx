@@ -62,10 +62,11 @@ export const OrganizerResultDialog: React.FC<OrganizerResultDialogProps> = ({
   // Calculate the delay for the preview of prompt and second FadeInText based on the first text's duration
   const firstText =
     result && templateCount > 0
-      ? i18n.t("promptOrganizer.summary.summary", [
-          result.sourceCount,
-          result.templates.length,
-        ])
+      ? i18n.t(
+        "promptOrganizer.summary.summary",
+        result.sourceCount,
+        result.templates.length,
+      )
       : ""
 
   const firstFadeinDuration = calculateFadeInDuration(firstText, 10)

@@ -67,11 +67,13 @@ export const ImprovedPromptPreview: React.FC<ImprovedPromptPreviewProps> = ({
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
+  const panelRef = useRef<HTMLDivElement>(null)
 
   /**
    * Scroll to specific line in the textarea
    */
   const handleScrollToLine = (startLine: number, _endLine: number) => {
+    console.log("Scrolling to line:", startLine)
     if (!textareaRef.current) return
 
     // Calculate line height
@@ -105,12 +107,11 @@ export const ImprovedPromptPreview: React.FC<ImprovedPromptPreviewProps> = ({
       ) : (
         <div
           className={cn(
-            "space-y-2",
-            changeLog.length > 0 && "grid grid-cols-[1fr_60px_400px] gap-4",
+            changeLog.length > 0 && "grid grid-cols-[2fr_50px_1fr] gap-1",
           )}
         >
           {/* Left: Improved prompt with overlay */}
-          <div className="relative">
+          <div className="relative overflow-hidden">
             <Textarea
               ref={textareaRef}
               value={improvedContent}
@@ -172,6 +173,7 @@ export const ImprovedPromptPreview: React.FC<ImprovedPromptPreviewProps> = ({
               <ConnectingLines
                 improvements={changeLog}
                 textareaRef={textareaRef}
+                explanationPanelRef={panelRef}
                 cardRefs={cardRefs}
                 hoveredIndex={hoveredIndex}
                 promptContent={improvedContent}
@@ -186,6 +188,7 @@ export const ImprovedPromptPreview: React.FC<ImprovedPromptPreviewProps> = ({
               hoveredIndex={hoveredIndex}
               onHoverChange={onHoverChange}
               onImprovementClick={handleScrollToLine}
+              containerRef={panelRef}
               cardRefs={cardRefs}
             />
           )}

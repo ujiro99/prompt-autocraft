@@ -228,8 +228,8 @@ export function ImportDialog({
                   ? "border-neutral-300 hover:border-neutral-400"
                   : "border-neutral-200",
                 isDragging &&
-                  state === ImportState.Idle &&
-                  "border-blue-400 bg-blue-50",
+                state === ImportState.Idle &&
+                "border-blue-400 bg-blue-50",
               )}
               role="region"
               aria-label="ファイル選択エリア"
@@ -419,12 +419,12 @@ export function ImportDialog({
                   <CircleAlert className="inline mb-1 mr-1 size-4" />
                   {state === ImportState.Success
                     ? i18n.t("variablePresets.importWarning.convertedToText", [
-                        result.missingPresets.length,
-                      ])
+                      result.missingPresets.length,
+                    ])
                     : i18n.t(
-                        "variablePresets.importWarning.check.convertedToText",
-                        [result.missingPresets.length],
-                      )}
+                      "variablePresets.importWarning.check.convertedToText",
+                      [result.missingPresets.length],
+                    )}
                 </h4>
                 <ScrollAreaWithGradient
                   className="max-h-40"
@@ -444,7 +444,8 @@ export function ImportDialog({
                       >
                         {i18n.t(
                           "variablePresets.importWarning.affectedVariable",
-                          [info.promptName, info.variableName],
+                          info.promptName,
+                          info.variableName,
                         )}
                       </li>
                     ))}
@@ -489,15 +490,15 @@ export function ImportDialog({
             <div className="flex gap-2">
               {(state === ImportState.Checking ||
                 state === ImportState.Success) && (
-                <Button
-                  variant="outline"
-                  onClick={handleReset}
-                  data-testid={TestIds.import.resetButton}
-                  aria-label={i18n.t("importDialog.selectAnotherFile")}
-                >
-                  {i18n.t("importDialog.selectAnotherFile")}
-                </Button>
-              )}
+                  <Button
+                    variant="outline"
+                    onClick={handleReset}
+                    data-testid={TestIds.import.resetButton}
+                    aria-label={i18n.t("importDialog.selectAnotherFile")}
+                  >
+                    {i18n.t("importDialog.selectAnotherFile")}
+                  </Button>
+                )}
               <Button
                 onClick={handleClose}
                 data-testid={TestIds.import.closeButton}

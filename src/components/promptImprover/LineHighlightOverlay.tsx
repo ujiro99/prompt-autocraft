@@ -8,6 +8,8 @@ interface LineHighlightOverlayProps {
   textareaRef: React.RefObject<HTMLTextAreaElement | null>
 }
 
+const OVERLAY_PADDING = 2
+
 export const LineHighlightOverlay: React.FC<LineHighlightOverlayProps> = ({
   improvements,
   hoveredIndex,
@@ -15,6 +17,7 @@ export const LineHighlightOverlay: React.FC<LineHighlightOverlayProps> = ({
 }) => {
   const [scrollTop, setScrollTop] = useState(0)
   const [lineHeight, setLineHeight] = useState(20)
+  const [paddingTop, setPaddingTop] = useState(8)
 
   useEffect(() => {
     const textarea = textareaRef.current
@@ -27,6 +30,12 @@ export const LineHighlightOverlay: React.FC<LineHighlightOverlayProps> = ({
       setLineHeight(computedLineHeight)
     }
 
+    // Calculate padding top
+    const computedPaddingTop = parseFloat(computedStyle.paddingTop)
+    if (!isNaN(computedPaddingTop)) {
+      setPaddingTop(computedPaddingTop)
+    }
+
     // Sync scroll position
     const handleScroll = () => {
       setScrollTop(textarea.scrollTop)
@@ -37,11 +46,14 @@ export const LineHighlightOverlay: React.FC<LineHighlightOverlayProps> = ({
   }, [textareaRef])
 
   const calculateTop = (lineNumber: number) => {
-    return (lineNumber - 1) * lineHeight
+    return (lineNumber - 1) * lineHeight + paddingTop - OVERLAY_PADDING
   }
 
   const calculateHeight = (startLine: number, endLine: number) => {
-    return Math.max((endLine - startLine + 1) * lineHeight, 12) // minimum 12px
+    return Math.max(
+      (endLine - startLine + 1) * lineHeight + OVERLAY_PADDING * 2,
+      12,
+    ) // minimum 12px
   }
 
   // Group improvements by overlap to offset bars
@@ -82,7 +94,7 @@ export const LineHighlightOverlay: React.FC<LineHighlightOverlayProps> = ({
       {/* Render highlight for hovered improvement */}
       {hoveredIndex !== null && improvements[hoveredIndex] && (
         <div
-          className="absolute bg-primary/10 rounded-md left-3 right-12"
+          className="absolute bg-primary/10 rounded-sm left-1.5 right-1.5"
           style={{
             top: `${calculateTop(improvements[hoveredIndex].start_line)}px`,
             height: `${calculateHeight(

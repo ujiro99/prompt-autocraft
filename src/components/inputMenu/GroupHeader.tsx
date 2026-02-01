@@ -33,7 +33,7 @@ export const GroupHeader = ({
         className,
       )}
       role="group"
-      aria-label={i18n.t("accessibility.groupLabel", [displayLabel, count])}
+      aria-label={i18n.t("accessibility.groupLabel", displayLabel, count)}
     >
       <span className="text-muted-foreground truncate">{displayLabel}</span>
       <span className="text-muted-foreground flex-shrink-0 bg-neutral-100 p-1 py-0.5 min-w-5 rounded text-center">

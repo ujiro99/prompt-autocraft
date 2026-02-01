@@ -222,10 +222,11 @@ export const PromptImproverSettingsDialog: React.FC<
       const [response] = await Promise.all([fetch(url), sleep(1000)])
       if (!response.ok) {
         throw new Error(
-          i18n
-            .t("errors.fetchFailed")
-            .replace("$1", response.status.toString())
-            .replace("$2", response.statusText),
+          i18n.t(
+            "errors.fetchFailed",
+            response.status.toString(),
+            response.statusText,
+          ),
         )
       }
 
