@@ -137,37 +137,34 @@ export const VariablePresetImportDialog: React.FC<
   )
 
   /**
-   * Handle import mode selection
+   * Handle import confirmation
    */
-  const handleImportConfirmed = useCallback(
-    async (mode: "merge" | "replace") => {
-      if (!dialogState || !dialogState.fileText) return
+  const handleImportConfirmed = useCallback(async () => {
+    if (!dialogState || !dialogState.fileText) return
 
-      const { fileText } = dialogState
+    const { fileText } = dialogState
 
-      try {
-        setIsSaving(true)
-        const count = await importVariablePresets(fileText, mode)
-        await onImportComplete()
+    try {
+      setIsSaving(true)
+      const count = await importVariablePresets(fileText)
+      await onImportComplete()
 
-        setDialogState({
-          mode: "success",
-          successMessage: i18n.t("variablePresets.importDialog.imported", [
-            count,
-          ]),
-        })
-      } catch (error) {
-        console.error("Failed to import presets:", error)
-        setDialogState({
-          mode: "error",
-          errorMessage: i18n.t("variablePresets.importDialog.error"),
-        })
-      } finally {
-        setIsSaving(false)
-      }
-    },
-    [dialogState, onImportComplete],
-  )
+      setDialogState({
+        mode: "success",
+        successMessage: i18n.t("variablePresets.importDialog.imported", [
+          count,
+        ]),
+      })
+    } catch (error) {
+      console.error("Failed to import presets:", error)
+      setDialogState({
+        mode: "error",
+        errorMessage: i18n.t("variablePresets.importDialog.error"),
+      })
+    } finally {
+      setIsSaving(false)
+    }
+  }, [dialogState, onImportComplete])
 
   /**
    * Handle dialog close
@@ -201,7 +198,6 @@ export const VariablePresetImportDialog: React.FC<
               existingIds.has(p.id),
             ).length
             const mergeTotal = presets.length + newCount
-            const replaceTotal = importedPresets.length
 
             return (
               <>
@@ -210,95 +206,38 @@ export const VariablePresetImportDialog: React.FC<
                     {i18n.t("variablePresets.importDialog.title")}
                   </DialogTitle>
                   <DialogDescription>
-                    {i18n.t("variablePresets.importDialog.selectMode")}
+                    {i18n.t("variablePresets.importDialog.addDescription")}
                   </DialogDescription>
                 </DialogHeader>
-                <div className="flex flex-col gap-3 py-4">
-                  <div className="border rounded-lg p-4 hover:bg-accent cursor-pointer transition-colors">
-                    <Button
-                      onClick={() => handleImportConfirmed("merge")}
-                      disabled={isSaving}
-                      variant="ghost"
-                      className="w-full h-auto flex flex-col items-start gap-2 p-0"
-                    >
-                      <div className="font-semibold text-base">
-                        {i18n.t("variablePresets.importDialog.add")}
-                      </div>
-                      <div className="text-sm text-muted-foreground text-left space-y-1">
-                        <div className="break-all whitespace-normal">
+                <div className="py-4">
+                  <div className="text-sm space-y-2">
+                    <div>
+                      {i18n.t(
+                        "variablePresets.importDialog.currentCount",
+                        [presets.length],
+                      )}
+                    </div>
+                    <div>
+                      <span>
+                        {i18n.t(
+                          "variablePresets.importDialog.importCount",
+                          [importedPresets.length],
+                        )}
+                      </span>
+                      {overwriteCount > 0 && (
+                        <span className="ml-2">
                           {i18n.t(
-                            "variablePresets.importDialog.addDescription",
+                            "variablePresets.importDialog.overwriteCount",
+                            [overwriteCount],
                           )}
-                        </div>
-                        <div className="text-xs space-y-0.5 mt-2">
-                          <div>
-                            {i18n.t(
-                              "variablePresets.importDialog.currentCount",
-                              [presets.length],
-                            )}
-                          </div>
-                          <div>
-                            <span>
-                              {i18n.t(
-                                "variablePresets.importDialog.importCount",
-                                [importedPresets.length],
-                              )}
-                            </span>
-                            {overwriteCount > 0 && (
-                              <span className="ml-2">
-                                {i18n.t(
-                                  "variablePresets.importDialog.overwriteCount",
-                                  [overwriteCount],
-                                )}
-                              </span>
-                            )}
-                          </div>
-                          <div className="font-semibold">
-                            {i18n.t("variablePresets.importDialog.totalAfter", [
-                              mergeTotal,
-                            ])}
-                          </div>
-                        </div>
-                      </div>
-                    </Button>
-                  </div>
-                  <div className="border rounded-lg p-4 hover:bg-accent cursor-pointer transition-colors">
-                    <Button
-                      onClick={() => handleImportConfirmed("replace")}
-                      disabled={isSaving}
-                      variant="ghost"
-                      className="w-full h-auto flex flex-col items-start gap-2 p-0"
-                    >
-                      <div className="font-semibold text-base">
-                        {i18n.t("variablePresets.importDialog.replaceAll")}
-                      </div>
-                      <div className="text-sm text-muted-foreground text-left space-y-1">
-                        <div className="break-all whitespace-normal">
-                          {i18n.t(
-                            "variablePresets.importDialog.replaceDescription",
-                          )}
-                        </div>
-                        <div className="text-xs space-y-0.5 mt-2">
-                          <div>
-                            {i18n.t(
-                              "variablePresets.importDialog.currentCount",
-                              [presets.length],
-                            )}
-                          </div>
-                          <div>
-                            {i18n.t(
-                              "variablePresets.importDialog.importCount",
-                              [importedPresets.length],
-                            )}
-                          </div>
-                          <div className="font-semibold">
-                            {i18n.t("variablePresets.importDialog.totalAfter", [
-                              replaceTotal,
-                            ])}
-                          </div>
-                        </div>
-                      </div>
-                    </Button>
+                        </span>
+                      )}
+                    </div>
+                    <div className="font-semibold">
+                      {i18n.t("variablePresets.importDialog.totalAfter", [
+                        mergeTotal,
+                      ])}
+                    </div>
                   </div>
                 </div>
                 <DialogFooter>
@@ -308,6 +247,12 @@ export const VariablePresetImportDialog: React.FC<
                     variant="secondary"
                   >
                     {i18n.t("buttons.cancel")}
+                  </Button>
+                  <Button
+                    onClick={handleImportConfirmed}
+                    disabled={isSaving}
+                  >
+                    {i18n.t("variablePresets.importDialog.add")}
                   </Button>
                 </DialogFooter>
               </>
