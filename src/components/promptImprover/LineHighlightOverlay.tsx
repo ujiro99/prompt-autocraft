@@ -1,6 +1,12 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { cn } from "@/lib/utils"
 import type { ImproveLog } from "@/services/promptImprover/improverService"
+
+interface BarPosition {
+  top: number
+  height: number
+  rightOffset?: number
+}
 
 interface LineHighlightOverlayProps {
   improvements: ImproveLog[]
@@ -9,6 +15,8 @@ interface LineHighlightOverlayProps {
 }
 
 const OVERLAY_PADDING = 2
+const BAR_INTERCEPT = 4
+const BAR_OFFSET = 6
 
 export const LineHighlightOverlay: React.FC<LineHighlightOverlayProps> = ({
   improvements,
@@ -45,62 +53,83 @@ export const LineHighlightOverlay: React.FC<LineHighlightOverlayProps> = ({
     return () => textarea.removeEventListener("scroll", handleScroll)
   }, [textareaRef])
 
-  const calculateTop = (lineNumber: number) => {
-    return (lineNumber - 1) * lineHeight + paddingTop - OVERLAY_PADDING
-  }
+  const positions: BarPosition[] = useMemo(() => {
+    const calculateTop = (lineNumber: number) => {
+      return (lineNumber - 1) * lineHeight + paddingTop - OVERLAY_PADDING
+    }
 
-  const calculateHeight = (startLine: number, endLine: number) => {
-    return Math.max(
-      (endLine - startLine + 1) * lineHeight + OVERLAY_PADDING * 2,
-      12,
-    ) // minimum 12px
-  }
+    const calculateHeight = (startLine: number, endLine: number) => {
+      return Math.max(
+        (endLine - startLine + 1) * lineHeight + OVERLAY_PADDING * 2,
+        12,
+      ) // minimum 12px
+    }
 
-  // Group improvements by overlap to offset bars
-  const getBarOffset = (index: number) => {
-    return index * 4 // Offset by 4px for each overlapping bar
-  }
+    // Group improvements by overlap to offset bars
+    const getBarOffset = (
+      positions: BarPosition[],
+      idx: number,
+      top: number,
+    ) => {
+      // Check for overlaps with existing positions
+      const overlaps = positions.filter((pos) => {
+        const bottom = pos.top + pos.height
+        return top >= pos.top && top <= bottom
+      })
+
+      // If there are overlapping bars, calculate the smallest offset that doesn't overlap.
+      const overlapCount = overlaps.length
+      for (let i = 0; i <= overlapCount; i++) {
+        const offset = BAR_INTERCEPT + i * BAR_OFFSET
+        const hasConflict = overlaps.some((pos) => pos.rightOffset === offset)
+        if (!hasConflict) {
+          return offset
+        }
+      }
+
+      return BAR_INTERCEPT + idx * BAR_OFFSET
+    }
+
+    return improvements.reduce((acc, improvement, idx) => {
+      const top = calculateTop(improvement.start_line)
+      const height = calculateHeight(
+        improvement.start_line,
+        improvement.end_line,
+      )
+      const rightOffset = getBarOffset(acc, idx, top)
+      acc.push({ top, height, rightOffset })
+      return acc
+    }, [] as BarPosition[])
+  }, [improvements, lineHeight, paddingTop])
 
   return (
     <div
-      className="absolute inset-0 pointer-events-none overflow-hidden"
+      className="absolute inset-1 pointer-events-none"
       style={{ transform: `translateY(-${scrollTop}px)` }}
     >
       {/* Render bars for all improvements */}
-      {improvements.map((improvement, index) => {
-        const top = calculateTop(improvement.start_line)
-        const height = calculateHeight(
-          improvement.start_line,
-          improvement.end_line,
-        )
-        const rightOffset = 2 + getBarOffset(index)
-
-        return (
-          <div
-            key={`bar-${index}`}
-            className={cn(
-              "absolute w-1 rounded-full transition-all duration-200",
-              hoveredIndex === index ? "bg-primary z-10" : "bg-primary/40 z-0",
-            )}
-            style={{
-              top: `${top}px`,
-              height: `${height}px`,
-              right: `${rightOffset}px`,
-            }}
-          />
-        )
-      })}
+      {improvements.map((_, index) => (
+        <div
+          key={`bar-${index}`}
+          className={cn(
+            "absolute w-1 rounded-full transition-all duration-200",
+            hoveredIndex === index ? "bg-primary z-10" : "bg-primary/40 z-0",
+          )}
+          style={{
+            top: `${positions[index].top}px`,
+            height: `${positions[index].height}px`,
+            right: `${positions[index].rightOffset}px`,
+          }}
+        />
+      ))}
 
       {/* Render highlight for hovered improvement */}
-      {hoveredIndex !== null && improvements[hoveredIndex] && (
+      {hoveredIndex !== null && positions[hoveredIndex] && (
         <div
           className="absolute bg-primary/10 rounded-sm left-1.5 right-1.5"
           style={{
-            top: `${calculateTop(improvements[hoveredIndex].start_line)}px`,
-            height: `${calculateHeight(
-              improvements[hoveredIndex].start_line,
-              improvements[hoveredIndex].end_line,
-            )}px`,
+            top: `${positions[hoveredIndex].top}px`,
+            height: `${positions[hoveredIndex].height}px`,
           }}
         />
       )}

@@ -15,6 +15,7 @@ interface LinePosition {
   y: number
 }
 
+const BAR_TOP_OFFSET = 4
 const CARD_TOP_OFFSET = 20
 
 export const ConnectingLines: React.FC<ConnectingLinesProps> = ({
@@ -30,8 +31,6 @@ export const ConnectingLines: React.FC<ConnectingLinesProps> = ({
   const [area, setArea] = useState<SVGSVGElement | null>(null)
 
   useEffect(() => {
-    console.log("Setup connecting lines...")
-
     const calculateLines = () => {
       const textarea = textareaRef.current
       if (!textarea || !cardRefs.current) return
@@ -46,8 +45,8 @@ export const ConnectingLines: React.FC<ConnectingLinesProps> = ({
         // Calculate bar position (on the left side of connecting area)
         const barTop =
           -textarea.scrollTop +
-          (improvement.start_line - 1) * lineHeight +
-          ((improvement.end_line - improvement.start_line + 1) * lineHeight) / 2
+          improvement.start_line * lineHeight +
+          BAR_TOP_OFFSET
         const barLeft = 0
 
         // Calculate card position (on the right side of connecting area)
@@ -124,7 +123,6 @@ export const ConnectingLines: React.FC<ConnectingLinesProps> = ({
           y2={line.end.y}
           stroke={line.isHovered ? "var(--ph-primary)" : "var(--ph-border)"}
           strokeWidth={line.isHovered ? 2 : 1}
-          strokeDasharray={line.isHovered ? "0" : "4 2"}
           className="transition-all duration-200"
         />
       ))}

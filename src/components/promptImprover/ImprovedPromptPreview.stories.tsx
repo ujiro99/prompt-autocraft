@@ -20,28 +20,28 @@ type Story = StoryObj<typeof meta>
 const sampleChangeLogs: ImproveLog[] = [
   {
     start_line: 1,
-    end_line: 1,
+    end_line: 3,
     description: "Added clearer context about the task objective",
     benefit:
       "Helps the AI understand the specific goal and produce more targeted results",
   },
   {
     start_line: 3,
-    end_line: 4,
+    end_line: 5,
     description: "Specified the programming language and style requirements",
     benefit:
       "Ensures the output matches expected format and coding conventions",
   },
   {
     start_line: 6,
-    end_line: 7,
+    end_line: 9,
     description: "Added examples to illustrate the expected behavior",
     benefit:
       "Provides concrete reference points that improve accuracy and reduce ambiguity",
   },
   {
-    start_line: 12,
-    end_line: 17,
+    start_line: 9,
+    end_line: 12,
     description: "Added a code example",
     benefit:
       "Gives the AI a clear template to follow, enhancing the quality of the generated code",

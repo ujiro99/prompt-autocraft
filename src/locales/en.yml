@@ -104,7 +104,7 @@ dialogs:
     improving: Improving...
     previewTitle: Improved Prompt
     error: Failed to improve prompt
-    explanationTitle: Improvements
+    explanationTitle: AI Explanation
     lineRange: "Lines $1-$2"
     singleLine: "Line $1"
     clickToScroll: Click to view in prompt

@@ -104,7 +104,7 @@ dialogs:
     improving: 改善中...
     previewTitle: 改善されたプロンプト
     error: プロンプトの改善に失敗しました
-    explanationTitle: 改善点
+    explanationTitle: 解説 by AI
     lineRange: "$1行目～$2行目"
     singleLine: "$1行目"
     clickToScroll: プロンプト内の該当箇所を表示

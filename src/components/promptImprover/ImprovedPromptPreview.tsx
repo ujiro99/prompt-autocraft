@@ -6,7 +6,10 @@ import { Textarea } from "@/components/ui/textarea"
 import type { ImproveLog } from "@/services/promptImprover/improverService"
 import { LineHighlightOverlay } from "./LineHighlightOverlay"
 import { ConnectingLines } from "./ConnectingLines"
-import { ImprovementExplanationPanel } from "./ImprovementExplanationPanel"
+import {
+  ImprovementExplanationTitle,
+  ImprovementExplanationPanel,
+} from "./ImprovementExplanationPanel"
 
 /**
  * Props for ImprovedPromptPreviewSection
@@ -30,8 +33,6 @@ interface ImprovedPromptPreviewProps {
   onImprove: () => void
   /** Callback to cancel improvement */
   onCancelImprovement: () => void
-  /** Callback to scroll to a specific line (optional) */
-  onScrollToLine?: (startLine: number, endLine: number) => void
   /** Whether the improve button is disabled */
   disabled?: boolean
   /** Whether API key is configured */
@@ -42,6 +43,8 @@ interface ImprovedPromptPreviewProps {
   cancelButtonText?: string
   /** Placeholder text during improvement */
   improvingPlaceholder?: string
+  /** Additional class name for the component */
+  className?: string
 }
 
 /**
@@ -58,12 +61,12 @@ export const ImprovedPromptPreview: React.FC<ImprovedPromptPreviewProps> = ({
   onHoverChange,
   onImprove,
   onCancelImprovement,
-  onScrollToLine,
   disabled = false,
   isApiKeyConfigured = true,
   improveButtonText = "Improve with AI",
   cancelButtonText = "Cancel",
   improvingPlaceholder = "Improving...",
+  className,
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -73,7 +76,6 @@ export const ImprovedPromptPreview: React.FC<ImprovedPromptPreviewProps> = ({
    * Scroll to specific line in the textarea
    */
   const handleScrollToLine = (startLine: number, _endLine: number) => {
-    console.log("Scrolling to line:", startLine)
     if (!textareaRef.current) return
 
     // Calculate line height
@@ -89,15 +91,16 @@ export const ImprovedPromptPreview: React.FC<ImprovedPromptPreviewProps> = ({
       top: Math.max(0, targetScrollTop),
       behavior: "smooth",
     })
-
-    // Call the external callback if provided
-    onScrollToLine?.(startLine, _endLine)
   }
 
   return (
-    <div className="mt-4 space-y-2">
-      <div className="flex items-center justify-between">
-        <label className="text-sm font-semibold text-foreground">{label}</label>
+    <div className={cn("flex flex-col space-y-1 h-[400px]", className)}>
+      <div className="grid grid-cols-[2fr_50px_1fr] gap-1 items-end">
+        <label className="text-base font-semibold text-foreground">
+          {label}
+        </label>
+        <div />
+        <ImprovementExplanationTitle />
       </div>
 
       {improvementError ? (
@@ -107,16 +110,17 @@ export const ImprovedPromptPreview: React.FC<ImprovedPromptPreviewProps> = ({
       ) : (
         <div
           className={cn(
-            changeLog.length > 0 && "grid grid-cols-[2fr_50px_1fr] gap-1",
+            "flex-1 overflow-hidden",
+            changeLog.length > 0 && "grid grid-cols-[2fr_50px_1fr] ",
           )}
         >
           {/* Left: Improved prompt with overlay */}
-          <div className="relative overflow-hidden">
+          <div className="relative overflow-hidden p-1">
             <Textarea
               ref={textareaRef}
               value={improvedContent}
               readOnly
-              className="max-h-60 bg-muted/50 font-mono"
+              className="h-full bg-muted/50 font-mono"
               rows={6}
               placeholder={isImproving ? improvingPlaceholder : ""}
             />
