@@ -46,6 +46,27 @@ const sampleChangeLogs: ImproveLog[] = [
     benefit:
       "Gives the AI a clear template to follow, enhancing the quality of the generated code",
   },
+  {
+    start_line: 15,
+    end_line: 20,
+    description: "1234567890123456789012345678901234567890",
+    benefit:
+      "Ensures the output matches expected format and coding conventions",
+  },
+  {
+    start_line: 25,
+    end_line: 26,
+    description: "1234567890123456789012345678901234567890",
+    benefit:
+      "Ensures the output matches expected format and coding conventions",
+  },
+  {
+    start_line: 28,
+    end_line: 30,
+    description: "1234567890123456789012345678901234567890",
+    benefit:
+      "Ensures the output matches expected format and coding conventions",
+  },
 ]
 
 const sampleImprovedContent = `You are tasked with creating a factorial calculation function.

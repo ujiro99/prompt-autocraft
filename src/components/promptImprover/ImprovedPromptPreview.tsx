@@ -10,6 +10,7 @@ import {
   ImprovementExplanationTitle,
   ImprovementExplanationPanel,
 } from "./ImprovementExplanationPanel"
+import { useScrollSync } from "./useScrollSync"
 
 /**
  * Props for ImprovedPromptPreviewSection
@@ -71,6 +72,15 @@ export const ImprovedPromptPreview: React.FC<ImprovedPromptPreviewProps> = ({
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
   const panelRef = useRef<HTMLDivElement>(null)
+
+  // Synchronize scrolling between textarea and improvement panel
+  useScrollSync({
+    textareaRef,
+    panelRef,
+    cardRefs,
+    improvements: changeLog,
+    enabled: changeLog.length > 0,
+  })
 
   /**
    * Scroll to specific line in the textarea
