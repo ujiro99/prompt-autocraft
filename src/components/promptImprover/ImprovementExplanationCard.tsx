@@ -18,10 +18,10 @@ export const ImprovementExplanationCard: React.FC<
     improvement.start_line === improvement.end_line
       ? i18n.t("dialogs.promptImprove.singleLine", [improvement.start_line])
       : i18n.t(
-        "dialogs.promptImprove.lineRange",
-        improvement.start_line,
-        improvement.end_line,
-      )
+          "dialogs.promptImprove.lineRange",
+          improvement.start_line,
+          improvement.end_line,
+        )
 
   return (
     <div
@@ -36,13 +36,13 @@ export const ImprovementExplanationCard: React.FC<
       onClick={onClick}
     >
       <div className="space-y-2">
-        <div className="text-sm font-semibold text-foreground/80">
+        <div className="text-sm font-semibold text-foreground/80 break-all">
           {improvement.description}
           <span className="ml-2 text-xs font-normal text-muted-foreground">
             {lineRange}
           </span>
         </div>
-        <div className="text-xs text-muted-foreground">
+        <div className="text-xs text-muted-foreground break-all">
           {improvement.benefit}
         </div>
       </div>

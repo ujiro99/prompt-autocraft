@@ -15,7 +15,7 @@ interface LineHighlightOverlayProps {
 }
 
 const OVERLAY_PADDING = 2
-const BAR_INTERCEPT = 4
+const BAR_INTERCEPT = 20
 const BAR_OFFSET = 6
 
 export const LineHighlightOverlay: React.FC<LineHighlightOverlayProps> = ({
