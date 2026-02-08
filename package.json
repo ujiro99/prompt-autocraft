@@ -1,5 +1,5 @@
 {
-  "name": "prompt-autocraft",
+  "name": "prompt-metacraft",
   "description": "Enable saving and recalling prompt history passed to the generative AI.",
   "private": true,
   "version": "0.9.1",
