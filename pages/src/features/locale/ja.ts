@@ -8,7 +8,7 @@ const lang = {
       subCopy:
         "送信したプロンプトを自動で蓄積。メニューと入力補完から即再利用に。 また、AIによりプロンプト履歴から構造化プロンプトを自動生成します。",
       description:
-        "ChatGPTやGeminiを日々使っているなかで、「あのときのプロンプト…もう一度使いたい！」と思ったことはありませんか？\nPrompt Autocraftは、あなたが送信したプロンプトを自動で保存・再利用するChrome拡張機能です。インストールした瞬間から、あなたのAI作業を加速します。",
+        "ChatGPTやGeminiを日々使っているなかで、「あのときのプロンプト…もう一度使いたい！」と思ったことはありませんか？\nPrompt Metacraftは、あなたが送信したプロンプトを自動で保存・再利用するChrome拡張機能です。インストールした瞬間から、あなたのAI作業を加速します。",
     },
     issues: {
       heading: "AIを使うほどに感じる、「ちょっとした不満」",
@@ -52,7 +52,7 @@ const lang = {
       ],
     },
     solutions: {
-      heading: "その不満、「Prompt Autocraft」が解決します",
+      heading: "その不満、「Prompt Metacraft」が解決します",
       cards: [
         {
           emoji: "📝",
