@@ -41,8 +41,8 @@ const { MockPromptImprover } = vi.hoisted(() => {
   return { MockPromptImprover }
 })
 
-vi.mock("@/services/genai/PromptImprover", () => ({
-  PromptImprover: MockPromptImprover,
+vi.mock("@/services/promptImprover/improverService", () => ({
+  ImproverService: MockPromptImprover,
 }))
 
 import { render, screen, waitFor } from "@testing-library/react"

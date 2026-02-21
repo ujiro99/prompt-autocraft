@@ -59,6 +59,10 @@ const config: StorybookConfig = {
         replacement: resolve(__dirname, "./mocks/wxt-storage.ts"),
       },
       {
+        find: /^@\/services\/aiService$/,
+        replacement: resolve(__dirname, "./mocks/aiService.ts"),
+      },
+      {
         find: /^#imports$/,
         replacement: resolve(__dirname, "./mocks/i18n.ts"),
       },

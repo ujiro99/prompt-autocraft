@@ -11,7 +11,7 @@ const mockIsInitialized = vi.fn()
 const mockGenerateContentStream = vi.fn()
 
 // Mock GeminiClient module
-vi.mock("../GeminiClient", () => ({
+vi.mock("../../genai/GeminiClient", () => ({
   GeminiClient: {
     getInstance: () => ({
       initialize: mockInitialize,

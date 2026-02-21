@@ -67,7 +67,7 @@ vi.mock("@/services/storage/definitions", () => ({
   genaiApiKeyStorage: mockGenaiApiKeyStorage,
 }))
 
-vi.mock("@/services/genai/defaultPrompts", () => ({
+vi.mock("@/services/promptOrganizer/defaultPrompts", () => ({
   SYSTEM_ORGANIZATION_INSTRUCTION: mockSystemInstruction,
 }))
 
