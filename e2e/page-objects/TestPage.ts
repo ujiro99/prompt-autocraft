@@ -13,9 +13,9 @@ export class TestPage extends BasePage {
 
   async waitForServiceReady(): Promise<void> {
     // Wait until input field is displayed
-    await this.page.waitForSelector(this.selectors.textInput[0], {
-      timeout: 5000,
-    })
+    const inputLocator = this.page.locator(this.selectors.textInput[0])
+    await inputLocator.waitFor({ timeout: 5000 })
+    await inputLocator.scrollIntoViewIfNeeded()
 
     // Wait until shadow host exists
     await this.page.waitForSelector("prompt-autocraft-ui", {
