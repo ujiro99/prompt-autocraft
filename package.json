@@ -25,7 +25,7 @@
     "e2e:debug": "playwright test --debug",
     "e2e:install": "playwright install --with-deps",
     "e2e:report": "playwright show-report",
-    "pre-e2e": "pnpm build:e2d && pnpm e2e:install",
+    "pre-e2e": "pnpm build:e2e && pnpm e2e:install",
     "postinstall": "wxt prepare",
     "submit:dry": "wxt submit --chrome-skip-submit-review --dry-run",
     "submit": "wxt submit --chrome-skip-submit-review",
