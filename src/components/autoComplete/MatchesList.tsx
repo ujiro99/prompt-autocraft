@@ -21,11 +21,15 @@ export const MatchesList: React.FC<MatchesListProps> = ({
   onExecute,
   onSelectAt,
 }) => {
-  const [active, setActive] = useState(false)
+  // Delay (ms) to ignore spurious MouseEnter fired right after the list appears.
+  const MOUSE_ENTER_DELAY_MS = 100
+
+  const [isMouseEnterEnabled, setIsMouseEnterEnabled] = useState(false)
 
   useEffect(() => {
     // Ignore MouseEnter that occurs immediately upon display.
-    setTimeout(() => setActive(true), 100)
+    const timer = setTimeout(() => setIsMouseEnterEnabled(true), MOUSE_ENTER_DELAY_MS)
+    return () => clearTimeout(timer)
   }, [])
 
   return (
@@ -37,7 +41,7 @@ export const MatchesList: React.FC<MatchesListProps> = ({
           isSelected={index === selectedIndex}
           onClick={onExecute}
           onMouseEnter={() => {
-            if (!active) return
+            if (!isMouseEnterEnabled) return
             onSelectAt(index)
           }}
         />
