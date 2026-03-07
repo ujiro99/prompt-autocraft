@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { AutoCompleteItem } from "./AutoCompleteItem"
 import type { AutoCompleteMatch } from "@/services/autoComplete/types"
 
@@ -21,6 +21,13 @@ export const MatchesList: React.FC<MatchesListProps> = ({
   onExecute,
   onSelectAt,
 }) => {
+  const [active, setActive] = useState(false)
+
+  useEffect(() => {
+    // Ignore MouseEnter that occurs immediately upon display.
+    setTimeout(() => setActive(true), 100)
+  }, [])
+
   return (
     <div>
       {matches.map((match, index) => (
@@ -29,7 +36,10 @@ export const MatchesList: React.FC<MatchesListProps> = ({
           match={match}
           isSelected={index === selectedIndex}
           onClick={onExecute}
-          onMouseEnter={() => onSelectAt(index)}
+          onMouseEnter={() => {
+            if (!active) return
+            onSelectAt(index)
+          }}
         />
       ))}
     </div>
