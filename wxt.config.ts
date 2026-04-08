@@ -2,6 +2,7 @@ import { defineConfig } from "wxt"
 import { resolve } from "node:path"
 import tailwindcss from "@tailwindcss/vite"
 import removeConsole from "vite-plugin-remove-console"
+import { removeRadixWarnings } from "./vite-plugin-remove-radix-warnings"
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
@@ -32,6 +33,8 @@ export default defineConfig({
             includes: ["log", "debug"],
           })
         : null,
+      // Remove Radix DialogTitle warnings in production (Shadow DOM compatibility)
+      configEnv.mode === "production" ? removeRadixWarnings() : null,
     ],
     build: {
       minify: configEnv.mode === "production" ? true : false,

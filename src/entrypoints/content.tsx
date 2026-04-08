@@ -5,6 +5,30 @@ import { supportHosts } from "@/services/aiService"
 import { analyticsService } from "@/services/analytics"
 import { DebugInterface } from "@/services/debug/debugInterface"
 
+// Initialize console filter to suppress Radix DialogTitle warning in production
+// This warning appears because Radix uses document.getElementById() which doesn't work with Shadow DOM
+// All Dialog components properly include DialogTitle, so this warning is harmless
+// See: https://github.com/radix-ui/primitives/issues/1386
+if (!import.meta.env.DEV) {
+  const originalConsoleError = console.error
+  console.error = (...args: unknown[]) => {
+    const message = args[0]
+    // Filter out ONLY the exact Radix DialogTitle warning
+    // Match the exact structure of the Radix warning message with backticks
+    if (
+      typeof message === "string" &&
+      message.includes("`DialogContent` requires a `DialogTitle`") &&
+      message.includes("for the component to be accessible for screen reader users")
+    ) {
+      // In production, suppress this specific warning as it's a false positive due to Shadow DOM
+      // In dev mode this check is skipped so developers can see all warnings
+      return
+    }
+    // Pass through all other errors unchanged
+    originalConsoleError.apply(console, args)
+  }
+}
+
 let _supportHosts = [...supportHosts]
 
 // Exclude development host from production. However, include it for E2E tests
