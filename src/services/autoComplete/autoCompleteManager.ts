@@ -102,12 +102,19 @@ export class AutoCompleteManager {
   /**
    * Find matching prompts and presets based on input and caret position
    * Supports matching 1-3 words, prioritizing longer matches
+   * Special case: "//" triggers pinned-only autocomplete when at start or after whitespace
    */
   private findMatches(
     input: string,
     caret: CaretPositionInfo,
   ): AutoCompleteMatch[] {
     const textBeforeCaret = input.substring(0, caret.position)
+
+    // Special case: Check if user typed "//" to show pinned prompts only
+    // Only trigger if "//" is at the start or preceded by whitespace
+    if (textBeforeCaret === "//" || textBeforeCaret.match(/\s\/\/$/)) {
+      return this.findPinnedPrompts(caret)
+    }
 
     // Extract the search term (last word or phrase before caret)
     const wordMatch = textBeforeCaret.match(/(\S+)$/)
@@ -193,6 +200,35 @@ export class AutoCompleteManager {
 
     // Apply max matches limit
     return combinedMatches.slice(0, this.options.maxMatches)
+  }
+
+  /**
+   * Find all pinned prompts (triggered by "//" input)
+   * Returns all pinned prompts without text filtering
+   */
+  private findPinnedPrompts(caret: CaretPositionInfo): AutoCompleteMatch[] {
+    // Filter to only pinned prompts
+    const pinnedPrompts = this.prompts.filter((prompt) => prompt.isPinned)
+
+    // The "//" is 2 characters long
+    const searchTermLength = 2
+    const inputMatchStart = caret.position - searchTermLength
+
+    // Map to AutoCompleteMatch format
+    const matches = pinnedPrompts.map((prompt) => ({
+      id: prompt.id,
+      name: prompt.name,
+      content: prompt.content,
+      isPinned: true,
+      matchStart: inputMatchStart,
+      matchEnd: caret.position,
+      newlineCount: caret.newlineCount,
+      searchTerm: "//",
+      matchType: "prompt" as const,
+    }))
+
+    // Apply max matches limit
+    return matches.slice(0, this.options.maxMatches)
   }
 
   /**
