@@ -1,10 +1,10 @@
-# Prompt Autocraft
+# Prompt Metacraft
 
-<img src="https://raw.githubusercontent.com/ujiro99/prompt-autocraft/refs/heads/main/docs/chrome%20web%20store/1400%C3%97560.png" alt="Logo" />
+<img src="https://raw.githubusercontent.com/ujiro99/prompt-metacraft/refs/heads/main/docs/chrome%20web%20store/1400%C3%97560.png" alt="Logo" />
 
-**Prompt Autocraft** is a Chrome extension that enables instant reuse of prompts through auto-saving and auto-completion.
+**Prompt Metacraft** is a Chrome extension that enables instant reuse of prompts through auto-saving and auto-completion.
 
-[Introduction / サービス紹介](https://ujiro99.github.io/prompt-autocraft/)
+[Introduction / サービス紹介](https://ujiro99.github.io/prompt-metacraft/)
 
 ## Features
 

@@ -2,7 +2,7 @@
 
 Last updated September 20, 2025
 
-Yujiro Takeda has developed the Prompt Autocraft as a Freemium application. This SERVICE is provided by Yujiro Takeda at no cost and is intended for use "as is."
+Yujiro Takeda has developed the Prompt Metacraft as a Freemium application. This SERVICE is provided by Yujiro Takeda at no cost and is intended for use "as is."
 
 This Privacy Policy outlines how your information is collected, used, and disclosed when using the Service. By choosing to use the Service, you agree to the collection and use of information in accordance with this policy. The Personal Information collected is utilized solely for providing and enhancing the Service. Your information will not be shared with anyone except as described in this Privacy Policy.
 

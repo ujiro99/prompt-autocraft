@@ -73,7 +73,7 @@ export class ImportExportPage {
     errors?: number
     errorMessages?: string[]
   }> {
-    const host = this.page.locator("prompt-autocraft-ui")
+    const host = this.page.locator("prompt-metacraft-ui")
     const dialog = host.locator(`[data-testid="${TestIds.import.dialog}"]`)
     await dialog.waitFor({ state: "visible" })
 

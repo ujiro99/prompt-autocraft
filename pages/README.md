@@ -1,4 +1,4 @@
-Prompt Autocraft pages
+Prompt Metacraft pages
 
 ## Getting Started
 

@@ -36,7 +36,7 @@ export default defineContentScript({
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
     const ui = await createShadowRootUi(ctx, {
-      name: "prompt-autocraft-ui",
+      name: "prompt-metacraft-ui",
       position: "inline",
       anchor: "body",
       onMount: (container) => {
