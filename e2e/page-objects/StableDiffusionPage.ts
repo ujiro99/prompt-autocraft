@@ -54,7 +54,7 @@ export class StableDiffusionPage extends BasePage {
     })
 
     // Wait until shadow host exists
-    await this.page.waitForSelector("prompt-autocraft-ui", {
+    await this.page.waitForSelector("prompt-metacraft-ui", {
       timeout: 5000,
       state: "attached",
     })

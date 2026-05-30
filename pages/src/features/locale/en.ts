@@ -9,7 +9,7 @@ const lang = {
       subCopy:
         "Prompts are saved automatically. Reuse them instantly from menus or autocomplete. AI also automatically generates structured prompts from your history.",
       description:
-        'Used ChatGPT or Gemini and thought, "I wish I could reuse that prompt"?\nMeet Prompt Autocraft — it automatically saves every prompt you send and lets you reuse it in a flash. Install it once, and your AI work instantly speeds up.',
+        'Used ChatGPT or Gemini and thought, "I wish I could reuse that prompt"?\nMeet Prompt Metacraft — it automatically saves every prompt you send and lets you reuse it in a flash. Install it once, and your AI work instantly speeds up.',
     },
     issues: {
       heading: 'Those "little frustrations" you feel as you use AI more',
@@ -53,7 +53,7 @@ const lang = {
       ],
     },
     solutions: {
-      heading: '"Prompt Autocraft" solves those frustrations',
+      heading: '"Prompt Metacraft" solves those frustrations',
       cards: [
         {
           emoji: "📝",

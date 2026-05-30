@@ -34,7 +34,7 @@ const notoSerifDisplay = Noto_Serif_Display({
 })
 
 export const metadata: Metadata = {
-  title: "Prompt Autocraft",
+  title: "Prompt Metacraft",
   description:
     "Enable saving and recalling prompts passed to the generative AI.",
 }

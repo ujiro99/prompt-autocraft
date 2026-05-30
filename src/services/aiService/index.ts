@@ -40,26 +40,39 @@ export const getAiServices = async () => {
   }
 
   // 2. Cache not available, fetch from external endpoint
-  try {
-    const configs = await fetch(import.meta.env.WXT_CONFIG_ENDPOINT).then(
-      (res) => res.json(),
-    )
-    console.debug("Fetched AI service configs:", configs)
+  // Try the primary endpoint first, then fallback to the old endpoint if available
+  const endpoints = [
+    import.meta.env.WXT_CONFIG_ENDPOINT,
+    import.meta.env.WXT_CONFIG_ENDPOINT_FALLBACK,
+  ].filter(Boolean) // Remove undefined/null values
 
+  let configs: Record<string, AIServiceConfigData> | null = null
+  let lastError: Error | null = null
+
+  for (const endpoint of endpoints) {
+    try {
+      configs = await fetch(endpoint).then((res) => res.json())
+      console.debug(`Fetched AI service configs from ${endpoint}:`, configs)
+      break // Successfully fetched, stop trying other endpoints
+    } catch (error) {
+      console.warn(`Failed to fetch from ${endpoint}:`, error)
+      lastError = error as Error
+    }
+  }
+
+  if (configs) {
     // 3. Save successful fetch to cache
     await storage.saveAiConfigCache(configs)
-
     return createServices(configs)
-  } catch (error) {
-    console.error("Failed to fetch AI service configs:", error)
-
-    // 4. Fetch failed, try to use fallback cache
-    const fallbackCache = await storage.getLatestAiConfigCache()
-    if (fallbackCache) {
-      console.warn("Using fallback AI service configs:", fallbackCache)
-      return createServices(fallbackCache)
-    }
-
-    throw new Error("No AI service configs available")
   }
+
+  // 4. All endpoints failed, try to use fallback cache
+  console.error("Failed to fetch AI service configs from all endpoints:", lastError)
+  const fallbackCache = await storage.getLatestAiConfigCache()
+  if (fallbackCache) {
+    console.warn("Using fallback AI service configs:", fallbackCache)
+    return createServices(fallbackCache)
+  }
+
+  throw new Error("No AI service configs available")
 }

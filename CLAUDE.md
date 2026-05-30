@@ -92,6 +92,7 @@ The extension uses a simplified, configuration-driven architecture for supportin
 - **Configuration System**:
   - Service configurations (DOM selectors, settings) are fetched from a remote endpoint
   - Endpoint URL is defined in `.env` as `WXT_CONFIG_ENDPOINT`
+  - Optional fallback endpoint can be defined as `WXT_CONFIG_ENDPOINT_FALLBACK` for backward compatibility
   - Configuration file is stored at `pages/public/data/promptHistory.json`
   - Configurations are cached daily with fallback support
   - Service classes only define service name and supported hosts
