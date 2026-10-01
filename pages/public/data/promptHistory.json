@@ -13,20 +13,31 @@
   "ChatGPT": {
     "serviceName": "ChatGPT",
     "selectors": {
-      "textInput": [
-        "#prompt-textarea",
-        "[data-testid='prompt-textarea']",
-        "#main form textarea"
-      ],
+      "textInput": ["[contenteditable='true']", "#mobile-composer-prompt"],
       "sendButton": [
-        "form button.composer-submit-button-color",
-        "button[data-testid='composer-speech-button']",
-        "button#composer-submit-button"
+        "form button[type='submit']",
+        "button[data-composer-submit]",
+        "button:has(svg.icon-primary-action)"
       ]
     },
     "popupPlacement": {
       "alignOffset": -20,
       "sideOffset": 22
+    }
+  },
+  "Gemini": {
+    "serviceName": "Gemini",
+    "selectors": {
+      "textInput": [".ql-editor[contenteditable='true']"],
+      "sendButton": [
+        "[data-test-id='send-button-container'] button",
+        "button mat-icon[fonticon='arrow_upward']",
+        "button mat-icon[fonticon='mic']"
+      ]
+    },
+    "popupPlacement": {
+      "alignOffset": -20,
+      "sideOffset": 28
     }
   },
   "Claude": {
@@ -37,29 +48,13 @@
         "div[contenteditable='true'].ProseMirror"
       ],
       "sendButton": [
-        "#main-content button._claude_1abo4_159",
-        "#main-content button.can-focus:has(svg[viewBox='0 0 256 256'])",
-        "#main-content button:has(svg[viewBox='0 0 21 21'])"
+        "button:has(span.bg-fill-brand)",
+        "[data-cds='SplitDropdownButton'] button"
       ]
     },
     "popupPlacement": {
       "alignOffset": -14,
       "sideOffset": 22
-    }
-  },
-  "Gemini": {
-    "serviceName": "Gemini",
-    "selectors": {
-      "textInput": [".ql-editor[contenteditable='true']"],
-      "sendButton": [
-        "button.send-button",
-        "button mat-icon[fonticon='send']",
-        "speech-dictation-mic-button"
-      ]
-    },
-    "popupPlacement": {
-      "alignOffset": -20,
-      "sideOffset": 28
     }
   },
   "Perplexity": {
@@ -73,6 +68,7 @@
         "button[type='button']:has(use[*|href='#pplx-icon-custom-perplexity-v2v'])",
         "button[type='button']:has(use[*|href='#pplx-icon-arrow-up'])",
         "button[type='button']:has(use[*|href^='#pplx-icon-arrow-right'])",
+        "button[type='button']:has(use[*|href^='#pplx-icon-player-stop-filled'])",
         "button[aria-label='Submit']"
       ]
     },
